@@ -13,7 +13,10 @@ namespace OsuApi.Examples
     {
         static void Main(string[] args)
         {
-            var configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText("appsettings.json"));
+            string path = "appsettings.json";
+            if (!File.Exists(path)) throw new Exception("You should firstly create an appsettings.json and pass your client_id and client_secret into it!");
+
+            var configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(path));
             if (configuration == null) throw new Exception("Bad appsettings.json");
 
             var api = (ApiV2)Api.CreateV2(configuration.client_id, configuration.client_secret);
