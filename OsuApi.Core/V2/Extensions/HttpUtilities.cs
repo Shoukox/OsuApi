@@ -32,6 +32,8 @@ namespace OsuApi.Core.V2.Extensions
                     foreach (var item in array)
                     {
                         stringValue = item.ToString();
+                        if (stringValue == null) continue;
+
                         query += getQueryParameter(queryParameterName, stringValue);
                         shouldBeQuestionMark = false;
                     }

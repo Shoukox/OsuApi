@@ -6,9 +6,9 @@ using OsuApi.Core.V2.Users.Models.HttpIO;
 
 namespace OsuApi.Core.V2.Users
 {
-    public class UsersClient : Client
+    public sealed class UsersClient : Client
     {
-        public UsersClient(HttpClient httpClient, GrantAccess grantAccess) : base(httpClient, grantAccess) { }
+        public UsersClient(Api api) : base(api) { }
 
         /// <summary>
         /// Similar to <see cref="GetUser(string, GetUserQueryParameters, string?)"/> but with authenticated user (token owner) as user id.
@@ -18,14 +18,14 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetOwnDataResponse> GetOwnData(string? mode = null)
         {
-            if (HttpClient == null) throw new Exception();
             if (mode != null && !typeof(Ruleset)
                 .GetFields()
                 .Select(m => m.GetRawConstantValue())
                 .Contains(mode)) throw new Exception();
 
-            var response = await MakeRequestAsync<UserExtend>(
+            var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/me/{mode ?? ""}",
+                    HttpMethod.Get,
                     queryParameters: null
             );
             if (response == default) throw new Exception();
@@ -41,10 +41,9 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserKudosuResponse> GetUserKudosu(long user)
         {
-            if (HttpClient == null) throw new Exception();
-
-            var response = await MakeRequestAsync<KudosuHistory[]>(
+            var response = await Api.MakeRequestAsync<KudosuHistory[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/kudosu",
+                    HttpMethod.Get,
                     queryParameters: null
             );
             if (response == default) throw new Exception();
@@ -62,14 +61,14 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserScoreResponse> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters)
         {
-            if (HttpClient == null) throw new Exception();
             if (!typeof(ScoreType)
                 .GetFields()
                 .Select(m => m.GetRawConstantValue())
                 .Contains(scoreType)) throw new Exception();
 
-            var response = await MakeRequestAsync<Score[]>(
+            var response = await Api.MakeRequestAsync<Score[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{userId}/scores/{scoreType}",
+                    HttpMethod.Get,
                     queryParameters: new QueryParameters(typeof(GetUserScoreQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
@@ -86,11 +85,10 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserBeatmapsResponse> GetUserBeatmaps_MostPlayed(long user, GetUserBeatmapsQueryParameters parameters)
         {
-            if (HttpClient == null) throw new Exception();
-
             string type = "most_played";
-            var response = await MakeRequestAsync<BeatmapPlaycount[]>(
+            var response = await Api.MakeRequestAsync<BeatmapPlaycount[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
+                    HttpMethod.Get,
                     queryParameters: new QueryParameters(typeof(GetUserBeatmapsQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
@@ -108,10 +106,9 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserBeatmapsResponse> GetUserBeatmaps(long user, string type, GetUserBeatmapsQueryParameters parameters)
         {
-            if (HttpClient == null) throw new Exception();
-
-            var response = await MakeRequestAsync<BeatmapsetExtended[]>(
+            var response = await Api.MakeRequestAsync<BeatmapsetExtended[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
+                    HttpMethod.Get,
                     queryParameters: new QueryParameters(typeof(GetUserBeatmapsQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
@@ -129,10 +126,9 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserRecentActivityResponse> GetUserRecentActivity(long user, GetUserRecentActivityQueryParameters parameters)
         {
-            if (HttpClient == null) throw new Exception();
-
-            var response = await MakeRequestAsync<Event[]>(
+            var response = await Api.MakeRequestAsync<Event[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/recent_activity",
+                    HttpMethod.Get,
                     queryParameters: new QueryParameters(typeof(GetUserRecentActivityQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
@@ -150,14 +146,14 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserResponse> GetUser(string user, GetUserQueryParameters parameters, string? mode = null)
         {
-            if (HttpClient == null) throw new Exception();
             if (mode != null && !typeof(Ruleset)
                 .GetFields()
                 .Select(m => m.GetRawConstantValue())
                 .Contains(mode)) throw new Exception();
 
-            var response = await MakeRequestAsync<UserExtend>(
+            var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/{mode ?? ""}",
+                    HttpMethod.Get,
                     queryParameters: new QueryParameters(typeof(GetUserQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
@@ -173,10 +169,9 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUsersResponse> GetUsers(GetUsersQueryParameters parameters)
         {
-            if (HttpClient == null) throw new Exception();
-
-            var response = await MakeRequestAsync<GetUsersResponse>(
+            var response = await Api.MakeRequestAsync<GetUsersResponse>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users",
+                    HttpMethod.Get,
                     queryParameters: new QueryParameters(typeof(GetUsersQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();

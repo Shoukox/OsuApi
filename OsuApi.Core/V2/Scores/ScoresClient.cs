@@ -4,16 +4,15 @@ using OsuApi.Core.V2.Scores.Models.HttpIO;
 
 namespace OsuApi.Core.V2.Scores
 {
-    public class ScoreClient : Client
+    public sealed class ScoresClient : Client
     {
-        public ScoreClient(HttpClient httpClient, GrantAccess grantAccess) : base(httpClient, grantAccess) { }
+        public ScoresClient(Api api) : base(api) { }
 
         public async Task<ScoresResponse> GetScores(ScoresQueryParameters parameters)
         {
-            if (HttpClient == null) throw new Exception();
-
-            var response = await MakeRequestAsync<ScoresResponse>(
+            var response = await Api.MakeRequestAsync<ScoresResponse>(
                 url: ApiV2.ApiMainFunctionsBaseAddress + "/scores",
+                HttpMethod.Get,
                 new QueryParameters(typeof(ScoresQueryParameters).GetProperties(), parameters)
             );
             if (response == default) throw new Exception();

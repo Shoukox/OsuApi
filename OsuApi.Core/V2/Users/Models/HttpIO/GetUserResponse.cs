@@ -2,6 +2,6 @@
 {
     public class GetUserResponse
     {
-        public UserExtend UserExtend { get; set; }
+        public UserExtend? UserExtend { get; set; }
     }
 }

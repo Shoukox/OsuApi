@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Scores.Models
 {
-    class MaximumStatistics
+    public record MaximumStatistics
     {
         [JsonPropertyName("great")]
         public int? Great { get; set; }

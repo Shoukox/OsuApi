@@ -1,5 +1,6 @@
 ﻿using OsuApi.Core;
 using OsuApi.Core.V2;
+using OsuApi.Core.V2.Beatmaps.Models.HttpIO;
 using OsuApi.Core.V2.Scores.Models;
 using OsuApi.Core.V2.Scores.Models.HttpIO;
 using OsuApi.Core.V2.Users.Models;
@@ -11,57 +12,37 @@ namespace OsuApi.Examples
 {
     internal class Program
     {
-        static void Main(string[] args)
+        async static Task Main(string[] args)
         {
+            // get config from json
             string path = "appsettings.json";
             if (!File.Exists(path)) throw new Exception("You should firstly create an appsettings.json and pass your client_id and client_secret into it!");
-
             var configuration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(path));
             if (configuration == null) throw new Exception("Bad appsettings.json");
 
-            var api = (ApiV2)Api.CreateV2(configuration.client_id, configuration.client_secret);
+            // api v2
+            var api = new ApiV2(configuration.client_id, configuration.client_secret);
 
-            var scoresRequest = new ScoresQueryParameters()
+            var q1 = new GetUserBeatmapScoreQueryParameters
+            {
+                
+            };
+            var r1 = await api.Beatmaps.GetUserBeatmapScore(2060305, 15319810, q1);
+
+            var q2 = new LookupBeatmapQueryParameters
+            {
+                Id = 970048
+            };
+            var r2 = await api.Beatmaps.LookupBeatmap(q2);
+
+            var q3 = new GetBeatmapAttributesRequest
             {
                 Ruleset = Ruleset.Osu,
-                CursorString = null
             };
-            var a1 = api.Score.GetScores(scoresRequest).Result;
+            var r3 = await api.Beatmaps.GetBeatmapAttributes(970048, q3);
 
-            var getUserQueryParameters = new GetUserQueryParameters()
-            {
-
-            };
-            var a2 = api.Users.GetUser("Shoukko", getUserQueryParameters).Result;
-
-            var getUserScoreQueryParameters = new GetUserScoreQueryParameters()
-            {
-                Limit = 5
-            };
-            var a3 = api.Users.GetUserScores(a2.UserExtend.Id!.Value, ScoreType.Best, getUserScoreQueryParameters).Result;
-            var a4 = api.Users.GetUserKudosu(a2.UserExtend.Id!.Value).Result;
-
-            var getUserBeatmapsQueryParameters = new GetUserBeatmapsQueryParameters()
-            {
-                Limit = 10,
-                Offset = "0"
-            };
-            var a5 = api.Users.GetUserBeatmaps_MostPlayed(a2.UserExtend.Id!.Value, getUserBeatmapsQueryParameters).Result;
-            var a6 = api.Users.GetUserBeatmaps(a2.UserExtend.Id!.Value, "favourite", getUserBeatmapsQueryParameters).Result;
-
-            var getUserRecentActivityQueryParameters = new GetUserRecentActivityQueryParameters()
-            {
-                Limit = 50,
-                Offset = "0"
-            };
-            var a7 = api.Users.GetUserRecentActivity(a2.UserExtend.Id!.Value, getUserRecentActivityQueryParameters).Result;
-
-            var getUsersQueryParameters = new GetUsersQueryParameters()
-            {
-                IncludeVariantStatistics = true,
-                Ids = ["7562902", "4504101", "15319810", "12955763", "17489298"]
-            };
-            var a8 = api.Users.GetUsers(getUsersQueryParameters).Result;
+            Console.WriteLine(JsonSerializer.Serialize(r2, new JsonSerializerOptions() { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(r3, new JsonSerializerOptions() { WriteIndented = true }));
         }
     }
 }

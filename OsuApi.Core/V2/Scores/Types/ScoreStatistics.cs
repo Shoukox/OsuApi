@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Scores.Models
 {
-    public class ScoreStatistics
+    public record ScoreStatistics
     {
         [JsonPropertyName("ok")]
         public int? Ok { get; set; }

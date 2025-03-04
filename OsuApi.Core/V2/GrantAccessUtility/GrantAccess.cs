@@ -1,27 +1,26 @@
-﻿using OsuApi.Core.V2.GrantAccessUtility.Models;
+﻿using OsuApi.Core.V2.Extensions.Types;
+using OsuApi.Core.V2.GrantAccessUtility.Models;
 using OsuApi.Core.V2.GrantAccessUtility.Models.HttpIO;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace OsuApi.Core.V2.GrantAccessUtility
 {
-    public class GrantAccess
+    public class GrantAccess : IDisposable
     {
+        private Api _api;
+
         private int _clientId;
         private string _clientSecret;
+
         private ClientCredentialsGrantResponse? _grantAccessResponse;
-        private HttpClient _httpClient;
+        private DateTime? _nextUpdateDateTime;
+        private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        private int _updatedCount;
-        private DateTime _nextUpdateDateTime;
+        public GrantAccess(int client_id, string client_secret, Api api) => (_clientId, _clientSecret, _api) = (client_id, client_secret, api);
 
-        private GrantAccess(int client_id, string client_secret, HttpClient httpClient) => (_clientId, _clientSecret, _httpClient) = (client_id, client_secret, httpClient);
-
-        public static GrantAccess Initialize(int client_id, string client_secret, HttpClient client) => new GrantAccess(client_id, client_secret, client);
-
-        private async Task<ClientCredentialsGrantResponse?> MakeRequest()
+        public async Task<ClientCredentialsGrantResponse> GetClientCredentialGrant()
         {
-            using var httpRequest = new HttpRequestMessage(HttpMethod.Post, ApiV2.ApiGrantAccessBaseAddress);
-
             var body = new ClientCredentialsGrantRequest()
             {
                 ClientId = _clientId,
@@ -29,12 +28,23 @@ namespace OsuApi.Core.V2.GrantAccessUtility
                 GrantType = GrantType.ClientCredentials,
                 Scope = Scope.Public
             };
-            httpRequest.Content = JsonContent.Create(body);
 
-            var httpResponse = await _httpClient.SendAsync(httpRequest, CancellationToken.None);
-            return await httpResponse.Content.ReadFromJsonAsync<ClientCredentialsGrantResponse>();
+            _grantAccessResponse = await _api.MakeRequestAsync<ClientCredentialsGrantResponse>(ApiV2.ApiGrantAccessBaseAddress, HttpMethod.Post, null, JsonContent.Create(body), false, false);
+            if (_grantAccessResponse == null) throw new Exception();
 
+            UpdateTimers();
+            Console.WriteLine("gotToken");
+
+            return _grantAccessResponse;
         }
+
+        private TimeSpan GetLeftTimeForNextUpdate()
+        {
+            if (_nextUpdateDateTime == null) throw new Exception();
+            return _nextUpdateDateTime.Value - DateTime.Now;
+        }
+
+        private bool ShouldUpdateToken() => GetLeftTimeForNextUpdate() < TimeSpan.Zero;
 
         private void UpdateTimers()
         {
@@ -44,31 +54,13 @@ namespace OsuApi.Core.V2.GrantAccessUtility
             _nextUpdateDateTime = DateTime.Now.AddSeconds(seconds);
         }
 
-        public async Task<ClientCredentialsGrantResponse> GetClientCredentialGrant()
+        public async Task UpdateTokenIfNeeded()
         {
-            _grantAccessResponse = await MakeRequest();
-            if (_grantAccessResponse == null) throw new Exception();
+            if (!ShouldUpdateToken()) return;
+            if (!await _semaphore.WaitAsync(0)) return;
 
-            UpdateTimers();
-
-            return _grantAccessResponse;
-        }
-
-        private TimeSpan GetLeftTimeForNextUpdate() => _nextUpdateDateTime - DateTime.Now;
-
-        public async Task StartWorker(CancellationToken token, bool firstlyWaitThenUpdate = true)
-        {
-            // todo
-            // reimplement to the impl like in python realization
-            if (firstlyWaitThenUpdate) await Task.Delay((int)GetLeftTimeForNextUpdate().TotalMilliseconds);
-
-            while (!token.IsCancellationRequested)
-            {
-                await GetClientCredentialGrant();
-
-                await Task.Delay((int)GetLeftTimeForNextUpdate().TotalMilliseconds);
-                _updatedCount += 1;
-            }
+            await GetClientCredentialGrant();
+            _semaphore.Release();
         }
 
         public string GetTokenType()
@@ -84,5 +76,28 @@ namespace OsuApi.Core.V2.GrantAccessUtility
 
             return _grantAccessResponse.AccessToken;
         }
+
+        #region Dispose
+        private bool disposedValue;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if (_semaphore != null) _semaphore.Dispose();
+                }
+
+                _grantAccessResponse = null;
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
