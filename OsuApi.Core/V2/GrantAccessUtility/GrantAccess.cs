@@ -8,28 +8,27 @@ namespace OsuApi.Core.V2.GrantAccessUtility
 {
     public class GrantAccess : IDisposable
     {
+        public const string ApiGrantAccessBaseAddress = "https://osu.ppy.sh/oauth/token";
+
         private Api _api;
-
-        private int _clientId;
-        private string _clientSecret;
-
+        private ApiConfiguration _apiConfiguration;
         private ClientCredentialsGrantResponse? _grantAccessResponse;
         private DateTime? _nextUpdateDateTime;
         private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
-        public GrantAccess(int client_id, string client_secret, Api api) => (_clientId, _clientSecret, _api) = (client_id, client_secret, api);
+        public GrantAccess(ApiConfiguration apiConfiguration, Api api) => (_apiConfiguration, _api) = (apiConfiguration, api);
 
         public async Task<ClientCredentialsGrantResponse> GetClientCredentialGrant()
         {
             var body = new ClientCredentialsGrantRequest()
             {
-                ClientId = _clientId,
-                ClientSecret = _clientSecret,
+                ClientId = _apiConfiguration.ClientId,
+                ClientSecret = _apiConfiguration.ClientSecret,
                 GrantType = GrantType.ClientCredentials,
                 Scope = Scope.Public
             };
 
-            _grantAccessResponse = await _api.MakeRequestAsync<ClientCredentialsGrantResponse>(ApiV2.ApiGrantAccessBaseAddress, HttpMethod.Post, null, JsonContent.Create(body), false, false);
+            _grantAccessResponse = await _api.MakeRequestAsync<ClientCredentialsGrantResponse>(ApiGrantAccessBaseAddress, HttpMethod.Post, null, JsonContent.Create(body), false, false);
             if (_grantAccessResponse == null) throw new Exception();
 
             UpdateTimers();

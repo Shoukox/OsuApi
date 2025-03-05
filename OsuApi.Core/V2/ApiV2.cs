@@ -12,8 +12,8 @@ namespace OsuApi.Core.V2
 {
     public class ApiV2 : Api
     {
-        public const string ApiGrantAccessBaseAddress = "https://osu.ppy.sh/oauth/token";
         public readonly static string ApiMainFunctionsBaseAddress = Api.GetBaseUrl(ApiVersion.ApiV2);
+        public readonly ApiConfiguration ApiConfiguration;
 
         public ScoresClient Scores { get; init; }
         public UsersClient Users { get; init; }
@@ -22,8 +22,7 @@ namespace OsuApi.Core.V2
         protected override HttpClient? HttpClient { get; set; }
         protected GrantAccess? GrantAccess { get; set; }
         protected CancellationTokenSource Cts;
-        private int _client_id;
-        private string _client_secret;
+
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
 
         public void SetApiResponseVersion(ApiResponseVersion apiResponseVersion)
@@ -37,8 +36,8 @@ namespace OsuApi.Core.V2
         {
             HttpClient = new HttpClient();
             Cts = new CancellationTokenSource();
-            _client_id = client_id;
-            _client_secret = client_secret;
+
+            ApiConfiguration = new ApiConfiguration(client_id, client_secret);
 
             SetDefaultRequestHeaders();
             Initialize().Wait(); // grantAccess is not null
@@ -52,7 +51,7 @@ namespace OsuApi.Core.V2
         {
             if (HttpClient == null) throw new Exception();
 
-            GrantAccess = new GrantAccess(_client_id, _client_secret, this);
+            GrantAccess = new GrantAccess(ApiConfiguration, this);
             await GrantAccess.GetClientCredentialGrant();
         }
 
@@ -79,15 +78,11 @@ namespace OsuApi.Core.V2
             if (updateTokenIfNeeded) await GrantAccess.UpdateTokenIfNeeded();
 
             using var httpRequest = new HttpRequestMessage(httpMethod, url);
-            if (setAuthorizationHeader) httpRequest.SetAuthorizationHeader($"{GrantAccess.GetTokenType()} {GrantAccess.GetAccessToken()}");
             httpRequest.Content = content;
-
+            if (setAuthorizationHeader) httpRequest.SetAuthorizationHeader($"{GrantAccess.GetTokenType()} {GrantAccess.GetAccessToken()}");
             if (queryParameters != null) httpRequest.SetQueryParameters(queryParameters.QueryProperties, queryParameters.ParametersClassInstance);
 
             var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);
-
-            var a = await httpResponse.Content.ReadAsStringAsync();
-
             httpResponse.EnsureSuccessStatusCode();
 
             //Console.WriteLine(await httpResponse.Content.ReadAsStringAsync());
