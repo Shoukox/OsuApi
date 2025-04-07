@@ -13,6 +13,7 @@ namespace OsuApi.Core.V2
     {
         public readonly static string ApiMainFunctionsBaseAddress = Api.GetBaseUrl(ApiVersion.ApiV2);
         public readonly ApiConfiguration ApiConfiguration;
+        public override ApiVersion CurrentApiVersion => ApiVersion.ApiV2;
 
         public ScoresClient Scores { get; init; }
         public UsersClient Users { get; init; }
@@ -22,7 +23,6 @@ namespace OsuApi.Core.V2
         protected GrantAccess? GrantAccess { get; set; }
         protected CancellationTokenSource Cts;
 
-        protected override ApiVersion CurrentApiVersion => ApiVersion.ApiV2;
         protected override bool IsInitialized { get; set; }
 
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
@@ -93,7 +93,7 @@ namespace OsuApi.Core.V2
             var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);
             httpResponse.EnsureSuccessStatusCode();
 
-            //Console.WriteLine(await httpResponse.Content.ReadAsStringAsync());
+            Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
 
             return await httpResponse.Content.ReadFromJsonAsync<T>();
         }

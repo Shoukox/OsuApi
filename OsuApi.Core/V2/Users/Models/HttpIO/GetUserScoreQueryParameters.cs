@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Users.Models.HttpIO
 {
-    public class GetUserScoreQueryParameters
+    public record GetUserScoreQueryParameters
     {
         [QueryParameter("legacy_only")]
         public string? LegacyOnly { get; set; }

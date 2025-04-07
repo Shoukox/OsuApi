@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Users.Models.HttpIO
 {
-    public class GetUserQueryParameters
+    public record GetUserQueryParameters
     {
         [QueryParameter("key")]
         public string? Key { get; set; }

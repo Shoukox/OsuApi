@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
-    public class GetUserBeatmapScoresResponse
+    public record GetUserBeatmapScoresResponse
     {
         [JsonPropertyName("scores")]
         public Score[]? Scores { get; set; }

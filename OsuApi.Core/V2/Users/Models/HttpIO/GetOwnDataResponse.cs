@@ -1,6 +1,6 @@
 ﻿namespace OsuApi.Core.V2.Users.Models.HttpIO
 {
-    public class GetOwnDataResponse
+    public record GetOwnDataResponse
     {
         public UserExtend? UserExtend { get; set; }
     }

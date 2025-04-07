@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Scores.Models.HttpIO
 {
-    public class ScoresQueryParameters
+    public record ScoresQueryParameters
     {
         [QueryParameter("ruleset")]
         public required string Ruleset { get; set; }

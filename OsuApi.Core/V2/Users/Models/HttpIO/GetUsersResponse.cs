@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Users.Models.HttpIO
 {
-    public class GetUsersResponse
+    public record GetUsersResponse
     {
         [JsonPropertyName("users")]
         public required User[] Users { get; set; }

@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Scores.Models.HttpIO
 {
-    public class ScoresResponse
+    public record ScoresResponse
     {
         [JsonPropertyName("scores")]
         public Score[]? Scores { get; set; }

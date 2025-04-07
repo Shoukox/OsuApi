@@ -27,7 +27,7 @@ namespace OsuApi.Core.V2.Beatmaps
             var response = await Api.MakeRequestAsync<BeatmapUserScore>(
                 url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmaps/{beatmap}/scores/users/{user}",
                 HttpMethod.Get,
-                new QueryParameters(typeof(GetUserBeatmapScoreQueryParameters).GetProperties(), parameters)
+                new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
@@ -39,7 +39,55 @@ namespace OsuApi.Core.V2.Beatmaps
             var response = await Api.MakeRequestAsync<GetUserBeatmapScoresResponse>(
                 url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmaps/{beatmap}/scores/users/{user}/all",
                 HttpMethod.Get,
-                new QueryParameters(typeof(GetUserBeatmapScoresQueryParameters).GetProperties(), parameters)
+                new QueryParameters(parameters.GetType().GetProperties(), parameters)
+            );
+            if (response == default) throw new Exception();
+
+            return response;
+        }
+
+        public async Task<GetBeatmapScoresResponse> GetBeatmapScores(long beatmap, GetBeatmapScoresQueryParameters parameters)
+        {
+            var response = await Api.MakeRequestAsync<BeatmapScores>(
+                url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmaps/{beatmap}/scores",
+                HttpMethod.Get,
+                new QueryParameters(parameters.GetType().GetProperties(), parameters)
+            );
+            if (response == default) throw new Exception();
+
+            return new GetBeatmapScoresResponse { BeatmapScores = response };
+        }
+
+        public async Task<GetBeatmapScoresResponse> GetBeatmapScoresNonLegacy(long beatmap, GetBeatmapScoresQueryParameters parameters)
+        {
+            var response = await Api.MakeRequestAsync<BeatmapScores>(
+                url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmaps/{beatmap}/solo-scores",
+                HttpMethod.Get,
+                new QueryParameters(parameters.GetType().GetProperties(), parameters)
+            );
+            if (response == default) throw new Exception();
+
+            return new GetBeatmapScoresResponse { BeatmapScores = response };
+        }
+
+        public async Task<GetBeatmapResponse> GetBeatmap(long beatmap)
+        {
+            var response = await Api.MakeRequestAsync<BeatmapExtended>(
+                url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmaps/{beatmap}",
+                HttpMethod.Get,
+                null
+            );
+            if (response == default) throw new Exception();
+
+            return new GetBeatmapResponse { BeatmapExtended = response };
+        }
+
+        public async Task<GetBeatmapsResponse> GetBeatmaps(long beatmap, GetBeatmapsQueryParameters parameters)
+        {
+            var response = await Api.MakeRequestAsync<GetBeatmapsResponse>(
+                url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmaps",
+                HttpMethod.Get,
+                new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 

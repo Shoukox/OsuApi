@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Users.Models.HttpIO
 {
-    public class GetUserBeatmapsQueryParameters
+    public record GetUserBeatmapsQueryParameters
     {
         [QueryParameter("limit")]
         public int? Limit { get; set; }

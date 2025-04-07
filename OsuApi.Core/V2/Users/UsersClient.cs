@@ -63,7 +63,7 @@ namespace OsuApi.Core.V2.Users
             var response = await Api.MakeRequestAsync<Score[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{userId}/scores/{scoreType}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(typeof(GetUserScoreQueryParameters).GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
@@ -83,7 +83,7 @@ namespace OsuApi.Core.V2.Users
             var response = await Api.MakeRequestAsync<BeatmapPlaycount[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(typeof(GetUserBeatmapsQueryParameters).GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
@@ -103,7 +103,7 @@ namespace OsuApi.Core.V2.Users
             var response = await Api.MakeRequestAsync<BeatmapsetExtended[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(typeof(GetUserBeatmapsQueryParameters).GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
@@ -123,7 +123,7 @@ namespace OsuApi.Core.V2.Users
             var response = await Api.MakeRequestAsync<Event[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/recent_activity",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(typeof(GetUserRecentActivityQueryParameters).GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
@@ -145,7 +145,7 @@ namespace OsuApi.Core.V2.Users
             var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/{mode ?? ""}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(typeof(GetUserQueryParameters).GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
@@ -163,7 +163,7 @@ namespace OsuApi.Core.V2.Users
             var response = await Api.MakeRequestAsync<GetUsersResponse>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(typeof(GetUsersQueryParameters).GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 

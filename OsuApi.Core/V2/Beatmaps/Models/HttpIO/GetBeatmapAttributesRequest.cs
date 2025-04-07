@@ -3,7 +3,7 @@ using OsuApi.Core.V2.Scores.Models;
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
-    public class GetBeatmapAttributesRequest
+    public record GetBeatmapAttributesRequest
     {
         /// <summary>
         /// See <see cref="Ruleset"/>

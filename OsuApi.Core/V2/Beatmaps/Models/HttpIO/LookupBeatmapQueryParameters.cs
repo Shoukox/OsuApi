@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
-    public class LookupBeatmapQueryParameters
+    public record LookupBeatmapQueryParameters
     {
         /// <summary>
         /// A beatmap checksum.

@@ -37,6 +37,20 @@ namespace OsuApi.Examples
             };
             var r3 = await api.Beatmaps.GetBeatmapAttributes(4921872, q3);
 
+            var q4 = new GetBeatmapScoresQueryParameters
+            {
+              
+            };
+            var r4 = await api.Beatmaps.GetBeatmapScoresNonLegacy(4921872, q4);
+
+            var r5 = await api.Beatmaps.GetBeatmap(4921872);
+
+            var q6 = new GetBeatmapsQueryParameters
+            {
+                BeatmapIds = new int[] { 4921872 , 4921872 }
+            };
+            var r6 = await api.Beatmaps.GetBeatmaps(4921872, q6);
+
             Console.WriteLine(JsonSerializer.Serialize(r2, new JsonSerializerOptions() { WriteIndented = true }));
             Console.WriteLine(JsonSerializer.Serialize(r3, new JsonSerializerOptions() { WriteIndented = true }));
         }

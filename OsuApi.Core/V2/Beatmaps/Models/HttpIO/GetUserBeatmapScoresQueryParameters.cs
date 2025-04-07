@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
-    public class GetUserBeatmapScoresQueryParameters
+    public record GetUserBeatmapScoresQueryParameters
     {
         [QueryParameter("legacy_only")]
         public string? LegacyOnly { get; set; }

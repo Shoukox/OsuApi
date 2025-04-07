@@ -1,8 +1,13 @@
 ﻿using OsuApi.Core.V2.Extensions.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
-    public record GetUserBeatmapScoreQueryParameters
+    public record GetBeatmapScoresQueryParameters
     {
         [QueryParameter("legacy_only")]
         public string? LegacyOnly { get; set; }
@@ -15,5 +20,8 @@ namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 
         [QueryParameter("mods")]
         public string? Mods { get; set; }
+
+        [QueryParameter("type")]
+        public string? Type { get; set; }
     }
 }

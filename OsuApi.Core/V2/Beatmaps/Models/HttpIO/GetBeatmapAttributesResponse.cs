@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
-    public class GetBeatmapAttributesResponse
+    public record GetBeatmapAttributesResponse
     {
         [JsonPropertyName("attributes")]
         public OsuDifficultyAttributes? DifficultyAttributes { get; set; }

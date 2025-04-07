@@ -12,7 +12,7 @@ namespace OsuApi.Core.V2.Scores
             var response = await Api.MakeRequestAsync<ScoresResponse>(
                 url: ApiV2.ApiMainFunctionsBaseAddress + "/scores",
                 HttpMethod.Get,
-                new QueryParameters(typeof(ScoresQueryParameters).GetProperties(), parameters)
+                new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
             if (response == default) throw new Exception();
 
