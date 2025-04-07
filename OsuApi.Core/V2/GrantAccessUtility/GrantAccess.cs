@@ -1,7 +1,5 @@
-﻿using OsuApi.Core.V2.Extensions.Types;
-using OsuApi.Core.V2.GrantAccessUtility.Models;
+﻿using OsuApi.Core.V2.GrantAccessUtility.Models;
 using OsuApi.Core.V2.GrantAccessUtility.Models.HttpIO;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace OsuApi.Core.V2.GrantAccessUtility
@@ -18,7 +16,7 @@ namespace OsuApi.Core.V2.GrantAccessUtility
 
         public GrantAccess(ApiConfiguration apiConfiguration, Api api) => (_apiConfiguration, _api) = (apiConfiguration, api);
 
-        public async Task<ClientCredentialsGrantResponse> GetClientCredentialGrant()
+        public async Task ClientCredentialGrant()
         {
             var body = new ClientCredentialsGrantRequest()
             {
@@ -33,8 +31,6 @@ namespace OsuApi.Core.V2.GrantAccessUtility
 
             UpdateTimers();
             Console.WriteLine("gotToken");
-
-            return _grantAccessResponse;
         }
 
         private TimeSpan GetLeftTimeForNextUpdate()
@@ -58,7 +54,7 @@ namespace OsuApi.Core.V2.GrantAccessUtility
             if (!ShouldUpdateToken()) return;
             if (!await _semaphore.WaitAsync(0)) return;
 
-            await GetClientCredentialGrant();
+            await ClientCredentialGrant();
             _semaphore.Release();
         }
 

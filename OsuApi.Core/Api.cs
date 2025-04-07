@@ -6,7 +6,13 @@ namespace OsuApi.Core
     public abstract class Api : IRequestMaker, IDisposable
     {
         protected abstract HttpClient? HttpClient { get; set; }
+        protected abstract ApiVersion CurrentApiVersion { get; }
+
+        protected abstract bool IsInitialized { get; set; }
         protected abstract Task Initialize();
+
+        public abstract Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true) where T : class;
+        public abstract void Dispose();
 
         protected static string GetBaseUrl(ApiVersion apiVersion)
         {
@@ -17,8 +23,5 @@ namespace OsuApi.Core
                 _ => throw new NotImplementedException()
             };
         }
-
-        public abstract Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true) where T : class;
-        public abstract void Dispose();
     }
 }

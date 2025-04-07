@@ -1,10 +1,5 @@
 ﻿using OsuApi.Core.V2.Extensions.Attributes;
 using OsuApi.Core.V2.Scores.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
 {
@@ -21,7 +16,7 @@ namespace OsuApi.Core.V2.Beatmaps.Models.HttpIO
         /// </summary>
         [QueryParameter("ruleset_id")]
         public string? RulesetId { get; set; }
-        
+
         [QueryParameter("mods")]
         public Mod[]? Mods { get; set; }
     }

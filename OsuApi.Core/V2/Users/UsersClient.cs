@@ -1,5 +1,5 @@
-﻿using OsuApi.Core.V2.Extensions.Types;
-using OsuApi.Core.V2.GrantAccessUtility;
+﻿using OsuApi.Core.V2.Extensions;
+using OsuApi.Core.V2.Extensions.Types;
 using OsuApi.Core.V2.Scores.Models;
 using OsuApi.Core.V2.Users.Models;
 using OsuApi.Core.V2.Users.Models.HttpIO;
@@ -18,10 +18,7 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetOwnDataResponse> GetOwnData(string? mode = null)
         {
-            if (mode != null && !typeof(Ruleset)
-                .GetFields()
-                .Select(m => m.GetRawConstantValue())
-                .Contains(mode)) throw new Exception();
+            ApiUtility.ThrowIfParameterValueIsNotOfType(mode, typeof(Ruleset));
 
             var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/me/{mode ?? ""}",
@@ -61,10 +58,7 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserScoreResponse> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters)
         {
-            if (!typeof(ScoreType)
-                .GetFields()
-                .Select(m => m.GetRawConstantValue())
-                .Contains(scoreType)) throw new Exception();
+            ApiUtility.ThrowIfParameterValueIsNotOfType(scoreType, typeof(Ruleset));
 
             var response = await Api.MakeRequestAsync<Score[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{userId}/scores/{scoreType}",
@@ -146,11 +140,8 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserResponse> GetUser(string user, GetUserQueryParameters parameters, string? mode = null)
         {
-            if (mode != null && !typeof(Ruleset)
-                .GetFields()
-                .Select(m => m.GetRawConstantValue())
-                .Contains(mode)) throw new Exception();
-
+            ApiUtility.ThrowIfParameterValueIsNotOfType(mode, typeof(Ruleset));
+            
             var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/{mode ?? ""}",
                     HttpMethod.Get,

@@ -1,5 +1,4 @@
-﻿using OsuApi.Core.V2.Extensions.Converters;
-using OsuApi.Core.V2.Users.Models;
+﻿using OsuApi.Core.V2.Users.Models;
 using System.Text.Json.Serialization;
 
 namespace OsuApi.Core.V2.Scores.Models

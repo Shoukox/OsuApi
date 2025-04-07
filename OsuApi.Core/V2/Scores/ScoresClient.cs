@@ -1,5 +1,4 @@
 ﻿using OsuApi.Core.V2.Extensions.Types;
-using OsuApi.Core.V2.GrantAccessUtility;
 using OsuApi.Core.V2.Scores.Models.HttpIO;
 
 namespace OsuApi.Core.V2.Scores

@@ -1,12 +1,11 @@
 ﻿using OsuApi.Core.V2.Beatmaps;
-using OsuApi.Core.V2.Extensions.Types;
 using OsuApi.Core.V2.Extensions;
+using OsuApi.Core.V2.Extensions.Types;
 using OsuApi.Core.V2.GrantAccessUtility;
 using OsuApi.Core.V2.Scores;
 using OsuApi.Core.V2.Users;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Threading;
 
 namespace OsuApi.Core.V2
 {
@@ -22,6 +21,9 @@ namespace OsuApi.Core.V2
         protected override HttpClient? HttpClient { get; set; }
         protected GrantAccess? GrantAccess { get; set; }
         protected CancellationTokenSource Cts;
+
+        protected override ApiVersion CurrentApiVersion => ApiVersion.ApiV2;
+        protected override bool IsInitialized { get; set; }
 
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
 
@@ -52,7 +54,9 @@ namespace OsuApi.Core.V2
             if (HttpClient == null) throw new Exception();
 
             GrantAccess = new GrantAccess(ApiConfiguration, this);
-            await GrantAccess.GetClientCredentialGrant();
+            await GrantAccess.ClientCredentialGrant();
+
+            IsInitialized = true;
         }
 
         private void SetDefaultRequestHeaders()
@@ -64,11 +68,15 @@ namespace OsuApi.Core.V2
         }
 
         /// <summary>
-        /// Makes an GET HTTP request with given QueryParameters
+        /// Makes an HTTP request with given QueryParameters
         /// </summary>
         /// <typeparam name="T">Response type to be decoded from json</typeparam>
         /// <param name="url">Url for current http request</param>
+        /// <param name="httpMethod">HTTP Method to use.</param>
         /// <param name="queryParameters">Query parameter to pass into url. Can be null, if none query parameters specified</param>
+        /// <param name="content">Body content of the request</param>
+        /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
+        /// <param name="setAuthorizationHeader">Should the auth header be set</param>
         /// <returns>A response of the type T</returns>
         public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true) where T : class
         {

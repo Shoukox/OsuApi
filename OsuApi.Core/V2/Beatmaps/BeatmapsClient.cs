@@ -1,16 +1,8 @@
 ﻿using OsuApi.Core.V2.Beatmaps.Models;
 using OsuApi.Core.V2.Beatmaps.Models.HttpIO;
 using OsuApi.Core.V2.Extensions.Types;
-using OsuApi.Core.V2.GrantAccessUtility;
-using OsuApi.Core.V2.Scores.Models;
-using OsuApi.Core.V2.Scores.Models.HttpIO;
 using OsuApi.Core.V2.Users.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OsuApi.Core.V2.Beatmaps
 {

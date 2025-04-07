@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace OsuApi.Core.V2.Extensions
 {
-    public static class HttpUtilities
+    public static class HttpRequestMessageExtensions
     {
         public static void SetQueryParameters(this HttpRequestMessage hrm, PropertyInfo[] jsonProperties, object parametersClassInstance)
         {
