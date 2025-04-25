@@ -91,9 +91,9 @@ namespace OsuApi.Core.V2
             if (queryParameters != null) httpRequest.SetQueryParameters(queryParameters.QueryProperties, queryParameters.ParametersClassInstance);
 
             var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            httpResponse.EnsureSuccessStatusCode();
+            if(!httpResponse.IsSuccessStatusCode) return null;
 
-            Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
+            //Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
 
             return await httpResponse.Content.ReadFromJsonAsync<T>();
         }

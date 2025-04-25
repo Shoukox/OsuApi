@@ -30,7 +30,7 @@ namespace OsuApi.Core.V2.GrantAccessUtility
             if (_grantAccessResponse == null) throw new Exception();
 
             UpdateTimers();
-            Console.WriteLine("gotToken");
+            Console.WriteLine("gotToken {0}", DateTime.Now.ToString("g"));
         }
 
         private TimeSpan GetLeftTimeForNextUpdate()

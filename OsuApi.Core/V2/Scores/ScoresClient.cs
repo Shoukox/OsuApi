@@ -7,14 +7,13 @@ namespace OsuApi.Core.V2.Scores
     {
         public ScoresClient(Api api) : base(api) { }
 
-        public async Task<ScoresResponse> GetScores(ScoresQueryParameters parameters)
+        public async Task<ScoresResponse?> GetScores(ScoresQueryParameters parameters)
         {
             var response = await Api.MakeRequestAsync<ScoresResponse>(
                 url: ApiV2.ApiMainFunctionsBaseAddress + "/scores",
                 HttpMethod.Get,
                 new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
 
             return response;
         }

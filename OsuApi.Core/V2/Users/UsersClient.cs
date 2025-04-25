@@ -16,7 +16,7 @@ namespace OsuApi.Core.V2.Users
         /// <param name="mode"><see cref="Ruleset"/> - User default mode will be used if not specified.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetOwnDataResponse> GetOwnData(string? mode = null)
+        public async Task<GetOwnDataResponse?> GetOwnData(string? mode = null)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(mode, typeof(Ruleset));
 
@@ -25,7 +25,7 @@ namespace OsuApi.Core.V2.Users
                     HttpMethod.Get,
                     queryParameters: null
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetOwnDataResponse { UserExtend = response };
         }
@@ -36,14 +36,14 @@ namespace OsuApi.Core.V2.Users
         /// <param name="user">Id of the user.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserKudosuResponse> GetUserKudosu(long user)
+        public async Task<GetUserKudosuResponse?> GetUserKudosu(long user)
         {
             var response = await Api.MakeRequestAsync<KudosuHistory[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/kudosu",
                     HttpMethod.Get,
                     queryParameters: null
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetUserKudosuResponse { KudosuHistories = response };
         }
@@ -56,7 +56,7 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserScoreResponse> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters)
+        public async Task<GetUserScoreResponse?> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(scoreType, typeof(Ruleset));
 
@@ -65,7 +65,7 @@ namespace OsuApi.Core.V2.Users
                     HttpMethod.Get,
                     queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetUserScoreResponse { Scores = response };
         }
@@ -77,7 +77,7 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserBeatmapsResponse> GetUserBeatmaps_MostPlayed(long user, GetUserBeatmapsQueryParameters parameters)
+        public async Task<GetUserBeatmapsResponse?> GetUserBeatmaps_MostPlayed(long user, GetUserBeatmapsQueryParameters parameters)
         {
             string type = "most_played";
             var response = await Api.MakeRequestAsync<BeatmapPlaycount[]>(
@@ -85,7 +85,7 @@ namespace OsuApi.Core.V2.Users
                     HttpMethod.Get,
                     queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetUserBeatmapsResponse { BeatmapPlaycounts = response };
         }
@@ -98,14 +98,14 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserBeatmapsResponse> GetUserBeatmaps(long user, string type, GetUserBeatmapsQueryParameters parameters)
+        public async Task<GetUserBeatmapsResponse?> GetUserBeatmaps(long user, string type, GetUserBeatmapsQueryParameters parameters)
         {
             var response = await Api.MakeRequestAsync<BeatmapsetExtended[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
                     HttpMethod.Get,
                     queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetUserBeatmapsResponse { BeatmapsetExtendeds = response };
 
@@ -118,14 +118,14 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserRecentActivityResponse> GetUserRecentActivity(long user, GetUserRecentActivityQueryParameters parameters)
+        public async Task<GetUserRecentActivityResponse?> GetUserRecentActivity(long user, GetUserRecentActivityQueryParameters parameters)
         {
             var response = await Api.MakeRequestAsync<Event[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/recent_activity",
                     HttpMethod.Get,
                     queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetUserRecentActivityResponse { Events = response };
         }
@@ -138,7 +138,7 @@ namespace OsuApi.Core.V2.Users
         /// <param name="mode"><see cref="Ruleset"/> - User default mode will be used if not specified.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserResponse> GetUser(string user, GetUserQueryParameters parameters, string? mode = null)
+        public async Task<GetUserResponse?> GetUser(string user, GetUserQueryParameters parameters, string? mode = null)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(mode, typeof(Ruleset));
             
@@ -147,7 +147,7 @@ namespace OsuApi.Core.V2.Users
                     HttpMethod.Get,
                     queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return new GetUserResponse { UserExtend = response };
         }
@@ -158,14 +158,14 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUsersResponse> GetUsers(GetUsersQueryParameters parameters)
+        public async Task<GetUsersResponse?> GetUsers(GetUsersQueryParameters parameters)
         {
             var response = await Api.MakeRequestAsync<GetUsersResponse>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users",
                     HttpMethod.Get,
                     queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
             );
-            if (response == default) throw new Exception();
+            if (response is null) return null;
 
             return response;
         }
