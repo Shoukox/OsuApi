@@ -93,7 +93,9 @@ namespace OsuApi.Core.V2
             var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);
             if(!httpResponse.IsSuccessStatusCode) return null;
 
-            //Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
+#if DEBUG
+            Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
+#endif
 
             return await httpResponse.Content.ReadFromJsonAsync<T>();
         }

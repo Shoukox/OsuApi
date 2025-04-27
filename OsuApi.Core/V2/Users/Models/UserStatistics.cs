@@ -5,16 +5,16 @@ namespace OsuApi.Core.V2.Users.Models
     public record UserStatistics
     {
         [JsonPropertyName("count_100")]
-        public int? Count100 { get; set; }
+        public int Count100 { get; set; }
 
         [JsonPropertyName("count_300")]
-        public int? Count300 { get; set; }
+        public int Count300 { get; set; }
 
         [JsonPropertyName("count_50")]
-        public int? Count50 { get; set; }
+        public int Count50 { get; set; }
 
         [JsonPropertyName("count_miss")]
-        public int? CountMiss { get; set; }
+        public int CountMiss { get; set; }
 
         /// <summary>
         /// Current country rank according to pp.

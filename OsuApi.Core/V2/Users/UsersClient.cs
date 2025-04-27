@@ -58,7 +58,7 @@ namespace OsuApi.Core.V2.Users
         /// <exception cref="Exception"></exception>
         public async Task<GetUserScoreResponse?> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters)
         {
-            ApiUtility.ThrowIfParameterValueIsNotOfType(scoreType, typeof(Ruleset));
+            ApiUtility.ThrowIfParameterValueIsNotOfType(scoreType, typeof(ScoreType));
 
             var response = await Api.MakeRequestAsync<Score[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{userId}/scores/{scoreType}",
