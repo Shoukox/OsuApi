@@ -26,7 +26,6 @@ namespace OsuApi.Core.V2
         protected CancellationToken CancellationToken { get; set; }
         protected override bool IsInitialized { get; set; }
 
-        private CancellationTokenSource? _cancellationTokenSource;
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
 
         public void SetApiResponseVersion(ApiResponseVersion apiResponseVersion)
@@ -36,11 +35,9 @@ namespace OsuApi.Core.V2
             _apiResponseVersion = apiResponseVersion;
         }
 
-        public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null, CancellationToken? cancellationToken = null)
+        public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null)
         {
-            _cancellationTokenSource = cancellationToken is null ? new CancellationTokenSource() : null;
             HttpClient = httpClient ?? new HttpClient();
-            CancellationToken = cancellationToken ?? _cancellationTokenSource!.Token;
 
             ApiConfiguration = new ApiConfiguration(client_id, client_secret);
             SetDefaultRequestHeaders();
