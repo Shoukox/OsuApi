@@ -7,9 +7,15 @@ namespace OsuApi.Core.V2.Users.Models.HttpIO
         [QueryParameter("legacy_only")]
         public string? LegacyOnly { get; set; }
 
+        /// <summary>
+        /// 0 or 1
+        /// </summary>
         [QueryParameter("include_fails")]
-        public string? IncludeFails { get; set; }
+        public int? IncludeFails { get; set; }
 
+        /// <summary>
+        /// See <see cref="Scores.Models.Ruleset"/>
+        /// </summary>
         [QueryParameter("mode")]
         public string? Mode { get; set; }
 
@@ -17,6 +23,6 @@ namespace OsuApi.Core.V2.Users.Models.HttpIO
         public int? Limit { get; set; }
 
         [QueryParameter("offset")]
-        public string? Offset { get; set; }
+        public int? Offset { get; set; }
     }
 }

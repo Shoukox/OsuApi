@@ -50,6 +50,6 @@ namespace OsuApi.Core.V2.Scores.Models
         public int SmallTickMiss { get; set; }
 
         [JsonPropertyName("legacy_combo_increase")]
-        public int? LegacyComboIncrease { get; set; }
+        public int LegacyComboIncrease { get; set; }
     }
 }

@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Shoukko</Authors>
-    <VersionPrefix>0.0.305</VersionPrefix>
+    <VersionPrefix>0.0.404</VersionPrefix>
     <Description>osu! api V2 wrapper. (Supported are beatmaps, users, scores apiv2 methods)</Description>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/Shoukox/OsuApi</RepositoryUrl>
@@ -24,6 +24,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="V2\Beatmapsets\Models\HttpIO\" />
   </ItemGroup>
 
 </Project>

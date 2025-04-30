@@ -1,4 +1,5 @@
 ﻿using OsuApi.Core.V2.Beatmaps;
+using OsuApi.Core.V2.Beatmapsets;
 using OsuApi.Core.V2.Extensions;
 using OsuApi.Core.V2.Extensions.Types;
 using OsuApi.Core.V2.GrantAccessUtility;
@@ -18,13 +19,14 @@ namespace OsuApi.Core.V2
         public ScoresClient Scores { get; init; }
         public UsersClient Users { get; init; }
         public BeatmapsClient Beatmaps { get; init; }
+        public BeatmapsetsClient Beatmapsets { get; init; }
 
         protected override HttpClient? HttpClient { get; set; }
         protected GrantAccess? GrantAccess { get; set; }
-        protected CancellationTokenSource Cts;
-
+        protected CancellationToken CancellationToken { get; set; }
         protected override bool IsInitialized { get; set; }
 
+        private CancellationTokenSource? _cancellationTokenSource;
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
 
         public void SetApiResponseVersion(ApiResponseVersion apiResponseVersion)
@@ -34,19 +36,20 @@ namespace OsuApi.Core.V2
             _apiResponseVersion = apiResponseVersion;
         }
 
-        public ApiV2(int client_id, string client_secret)
+        public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null, CancellationToken? cancellationToken = null)
         {
-            HttpClient = new HttpClient();
-            Cts = new CancellationTokenSource();
+            _cancellationTokenSource = cancellationToken is null ? new CancellationTokenSource() : null;
+            HttpClient = httpClient ?? new HttpClient();
+            CancellationToken = cancellationToken ?? _cancellationTokenSource!.Token;
 
             ApiConfiguration = new ApiConfiguration(client_id, client_secret);
-
             SetDefaultRequestHeaders();
-            Initialize().Wait(); // grantAccess is not null
+            Initialize().Wait();
 
             Scores = new ScoresClient(this);
             Users = new UsersClient(this);
             Beatmaps = new BeatmapsClient(this);
+            Beatmapsets = new BeatmapsetsClient(this);
         }
 
         protected override async Task Initialize()
@@ -91,7 +94,7 @@ namespace OsuApi.Core.V2
             if (queryParameters != null) httpRequest.SetQueryParameters(queryParameters.QueryProperties, queryParameters.ParametersClassInstance);
 
             var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            if(!httpResponse.IsSuccessStatusCode) return null;
+            if (!httpResponse.IsSuccessStatusCode) return null;
 
 #if DEBUG
             Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
