@@ -13,12 +13,13 @@ namespace OsuApi.Core.V2.Beatmapsets
     {
         public BeatmapsetsClient(Api api) : base(api) { }
 
-        public async Task<BeatmapsetExtended> GetBeatmapset(int beatmapset)
+        public async Task<BeatmapsetExtended> GetBeatmapset(int beatmapset, CancellationToken? cancellationToken = null)
         {
             var response = await Api.MakeRequestAsync<BeatmapsetExtended>(
                 url: ApiV2.ApiMainFunctionsBaseAddress + $"/beatmapsets/{beatmapset}",
                 HttpMethod.Get,
-                null
+                null,
+                cancellationToken: cancellationToken
             );
             if (response == default) throw new Exception();
 

@@ -3,6 +3,7 @@ using OsuApi.Core.V2.Extensions.Types;
 using OsuApi.Core.V2.Scores.Models;
 using OsuApi.Core.V2.Users.Models;
 using OsuApi.Core.V2.Users.Models.HttpIO;
+using System.Threading;
 
 namespace OsuApi.Core.V2.Users
 {
@@ -16,14 +17,15 @@ namespace OsuApi.Core.V2.Users
         /// <param name="mode"><see cref="Ruleset"/> - User default mode will be used if not specified.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetOwnDataResponse?> GetOwnData(string? mode = null)
+        public async Task<GetOwnDataResponse?> GetOwnData(string? mode = null, CancellationToken? cancellationToken = null)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(mode, typeof(Ruleset));
 
             var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/me/{mode ?? ""}",
                     HttpMethod.Get,
-                    queryParameters: null
+                    queryParameters: null,
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -36,12 +38,13 @@ namespace OsuApi.Core.V2.Users
         /// <param name="user">Id of the user.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserKudosuResponse?> GetUserKudosu(long user)
+        public async Task<GetUserKudosuResponse?> GetUserKudosu(long user, CancellationToken? cancellationToken = null)
         {
             var response = await Api.MakeRequestAsync<KudosuHistory[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/kudosu",
                     HttpMethod.Get,
-                    queryParameters: null
+                    queryParameters: null,
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -56,14 +59,15 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserScoreResponse?> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters)
+        public async Task<GetUserScoreResponse?> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters, CancellationToken? cancellationToken = null)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(scoreType, typeof(ScoreType));
 
             var response = await Api.MakeRequestAsync<Score[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{userId}/scores/{scoreType}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters),
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -77,13 +81,14 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserBeatmapsResponse?> GetUserBeatmaps_MostPlayed(long user, GetUserBeatmapsQueryParameters parameters)
+        public async Task<GetUserBeatmapsResponse?> GetUserBeatmaps_MostPlayed(long user, GetUserBeatmapsQueryParameters parameters, CancellationToken? cancellationToken = null)
         {
             string type = "most_played";
             var response = await Api.MakeRequestAsync<BeatmapPlaycount[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters),
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -98,12 +103,13 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserBeatmapsResponse?> GetUserBeatmaps(long user, string type, GetUserBeatmapsQueryParameters parameters)
+        public async Task<GetUserBeatmapsResponse?> GetUserBeatmaps(long user, string type, GetUserBeatmapsQueryParameters parameters, CancellationToken? cancellationToken = null)
         {
             var response = await Api.MakeRequestAsync<BeatmapsetExtended[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/beatmapsets/{type}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters),
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -118,12 +124,13 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserRecentActivityResponse?> GetUserRecentActivity(long user, GetUserRecentActivityQueryParameters parameters)
+        public async Task<GetUserRecentActivityResponse?> GetUserRecentActivity(long user, GetUserRecentActivityQueryParameters parameters, CancellationToken? cancellationToken = null)
         {
             var response = await Api.MakeRequestAsync<Event[]>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/recent_activity",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters),
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -138,14 +145,15 @@ namespace OsuApi.Core.V2.Users
         /// <param name="mode"><see cref="Ruleset"/> - User default mode will be used if not specified.</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserResponse?> GetUser(string user, GetUserQueryParameters parameters, string? mode = null)
+        public async Task<GetUserResponse?> GetUser(string user, GetUserQueryParameters parameters, string? mode = null, CancellationToken? cancellationToken = null)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(mode, typeof(Ruleset));
             
             var response = await Api.MakeRequestAsync<UserExtend>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/{mode ?? ""}",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters),
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 
@@ -158,12 +166,13 @@ namespace OsuApi.Core.V2.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUsersResponse?> GetUsers(GetUsersQueryParameters parameters)
+        public async Task<GetUsersResponse?> GetUsers(GetUsersQueryParameters parameters, CancellationToken? cancellationToken = null)
         {
             var response = await Api.MakeRequestAsync<GetUsersResponse>(
                     url: ApiV2.ApiMainFunctionsBaseAddress + $"/users",
                     HttpMethod.Get,
-                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters)
+                    queryParameters: new QueryParameters(parameters.GetType().GetProperties(), parameters),
+                    cancellationToken: cancellationToken
             );
             if (response is null) return null;
 

@@ -14,7 +14,7 @@ namespace OsuApi.Core.V2
     {
         public readonly static string ApiMainFunctionsBaseAddress = Api.GetBaseUrl(ApiVersion.ApiV2);
         public readonly ApiConfiguration ApiConfiguration;
-        public override ApiVersion CurrentApiVersion => ApiVersion.ApiV2;
+        public override ApiVersion CurrentApiVersion() => ApiVersion.ApiV2;
 
         public ScoresClient Scores { get; init; }
         public UsersClient Users { get; init; }
@@ -23,8 +23,8 @@ namespace OsuApi.Core.V2
 
         protected override HttpClient? HttpClient { get; set; }
         protected GrantAccess? GrantAccess { get; set; }
-        protected CancellationToken CancellationToken { get; set; }
-        protected override bool IsInitialized { get; set; }
+
+        public bool IsInitialized { get; set; }
 
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
 
@@ -78,26 +78,30 @@ namespace OsuApi.Core.V2
         /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
         /// <param name="setAuthorizationHeader">Should the auth header be set</param>
         /// <returns>A response of the type T</returns>
-        public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true) where T : class
+        public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null) where T : class
         {
+            cancellationToken ??= CancellationToken.None;
+
             if (GrantAccess == null) throw new Exception();
             if (HttpClient == null) throw new Exception();
 
             if (updateTokenIfNeeded) await GrantAccess.UpdateTokenIfNeeded();
+            cancellationToken?.ThrowIfCancellationRequested();
 
             using var httpRequest = new HttpRequestMessage(httpMethod, url);
             httpRequest.Content = content;
             if (setAuthorizationHeader) httpRequest.SetAuthorizationHeader($"{GrantAccess.GetTokenType()} {GrantAccess.GetAccessToken()}");
             if (queryParameters != null) httpRequest.SetQueryParameters(queryParameters.QueryProperties, queryParameters.ParametersClassInstance);
+            cancellationToken?.ThrowIfCancellationRequested();
 
-            var httpResponse = await HttpClient.SendAsync(httpRequest).ConfigureAwait(false);
+            var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken!.Value).ConfigureAwait(false);
             if (!httpResponse.IsSuccessStatusCode) return null;
 
 #if DEBUG
-            Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync());
+            Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
 #endif
 
-            return await httpResponse.Content.ReadFromJsonAsync<T>();
+            return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken!.Value);
         }
 
         #region Dispose

@@ -4,6 +4,13 @@ namespace OsuApi.Core.V2
 {
     interface IRequestMaker
     {
-        public Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true) where T : class;
+        public abstract Task<T?> MakeRequestAsync<T>(
+             string url,
+             HttpMethod httpMethod,
+             QueryParameters? queryParameters = null,
+             HttpContent? content = null,
+             bool updateTokenIfNeeded = true,
+             bool setAuthorizationHeader = true,
+             CancellationToken? cancellationToken = null) where T : class;
     }
 }
