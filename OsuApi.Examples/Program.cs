@@ -20,7 +20,8 @@ namespace OsuApi.Examples
             var api = new ApiV2(configuration.client_id, configuration.client_secret);
             //var a1 = await api.Users.GetUser("@Shoukko", new());
             //var a2 = await api.Beatmaps.GetUserBeatmapScores(970048, 15319810, new());
-            var a3 = await api.Users.GetUserScores(15319810, ScoreType.Recent, new() { IncludeFails = 1, Limit = 1, Mode = Ruleset.Osu });
+            //var a3 = await api.Users.GetUserScores(15319810, ScoreType.Recent, new() { IncludeFails = 1, Limit = 1, Mode = Ruleset.Osu });
+            var a4 = await api.Beatmapsets.GetBeatmapset(2363330);
         }
     }
 }

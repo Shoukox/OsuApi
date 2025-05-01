@@ -21,7 +21,7 @@ namespace OsuApi.Core.V2.Users.Models
         public int? FavouriteCount { get; init; }
 
         [JsonPropertyName("hype")]
-        public int? Hype { get; init; }
+        public Hype? Hype { get; init; }
 
         /// <summary>
         /// Not null
