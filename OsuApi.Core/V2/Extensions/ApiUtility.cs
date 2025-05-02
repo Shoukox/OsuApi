@@ -1,11 +1,4 @@
-﻿using OsuApi.Core.V2.Scores.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OsuApi.Core.V2.Extensions
+﻿namespace OsuApi.Core.V2.Extensions
 {
     public static class ApiUtility
     {
@@ -16,7 +9,7 @@ namespace OsuApi.Core.V2.Extensions
         /// <param name="type">The type the parameter should be checked for</param>
         public static void ThrowIfParameterValueIsNotOfType(string? parameter, Type type)
         {
-            if (parameter != null && 
+            if (parameter != null &&
                 !type.GetFields()
                      .Select(m => m.GetRawConstantValue())
                      .Contains(parameter)) throw new Exception();

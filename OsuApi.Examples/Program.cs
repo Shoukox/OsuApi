@@ -1,7 +1,4 @@
 ﻿using OsuApi.Core.V2;
-using OsuApi.Core.V2.Beatmaps.Models.HttpIO;
-using OsuApi.Core.V2.Scores.Models;
-using OsuApi.Core.V2.Users.Models;
 using System.Text.Json;
 
 namespace OsuApi.Examples

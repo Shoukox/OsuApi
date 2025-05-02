@@ -1,10 +1,10 @@
-﻿using OsuApi.Core.V2.Beatmaps;
-using OsuApi.Core.V2.Beatmapsets;
+﻿using OsuApi.Core.V2.Clients.Beatmaps;
+using OsuApi.Core.V2.Clients.Beatmapsets;
+using OsuApi.Core.V2.Clients.Scores;
+using OsuApi.Core.V2.Clients.Users;
 using OsuApi.Core.V2.Extensions;
 using OsuApi.Core.V2.Extensions.Types;
-using OsuApi.Core.V2.GrantAccessUtility;
-using OsuApi.Core.V2.Scores;
-using OsuApi.Core.V2.Users;
+using OsuApi.Core.V2.Utilities.GrantAccessUtility;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
