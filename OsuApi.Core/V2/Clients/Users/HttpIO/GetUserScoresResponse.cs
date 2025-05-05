@@ -2,7 +2,7 @@
 
 namespace OsuApi.Core.V2.Clients.Users.HttpIO
 {
-    public record GetUserScoreResponse
+    public record GetUserScoresResponse
     {
         public required Score[] Scores { get; set; }
     }

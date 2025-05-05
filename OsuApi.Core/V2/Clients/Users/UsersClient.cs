@@ -58,7 +58,7 @@ namespace OsuApi.Core.V2.Clients.Users
         /// <param name="parameters">Query parameters</param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<GetUserScoreResponse?> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters, CancellationToken? cancellationToken = null)
+        public async Task<GetUserScoresResponse?> GetUserScores(long userId, string scoreType, GetUserScoreQueryParameters parameters, CancellationToken? cancellationToken = null)
         {
             ApiUtility.ThrowIfParameterValueIsNotOfType(scoreType, typeof(ScoreType));
 
@@ -70,7 +70,7 @@ namespace OsuApi.Core.V2.Clients.Users
             );
             if (response is null) return null;
 
-            return new GetUserScoreResponse { Scores = response };
+            return new GetUserScoresResponse { Scores = response };
         }
 
         /// <summary>
