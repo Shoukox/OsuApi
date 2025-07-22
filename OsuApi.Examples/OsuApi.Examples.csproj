@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OsuApi.Core\OsuApi.Core.csproj" />
+    <ProjectReference Include="..\OsuApi\OsuApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

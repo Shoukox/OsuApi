@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuApi.Core", "OsuApi.Core\OsuApi.Core.csproj", "{1192859B-80EB-4269-9B81-5FFBA1A49A60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuApi", "OsuApi\OsuApi.csproj", "{1192859B-80EB-4269-9B81-5FFBA1A49A60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuApi.Examples", "OsuApi.Examples\OsuApi.Examples.csproj", "{25CB07BD-F37E-D1B9-4990-7B4AC65D890A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{264E1DF3-966B-406E-91A5-21842A19FF15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A780EED1-65BC-45BB-8DBC-D1F709115106}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{38209224-0822-407D-A624-9E31150CE441}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuApi.Tests", "OsuApi.Tests\OsuApi.Tests.csproj", "{7ED5338C-1E63-4764-97C3-9094D785AFEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,11 +29,20 @@ Global
 		{25CB07BD-F37E-D1B9-4990-7B4AC65D890A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25CB07BD-F37E-D1B9-4990-7B4AC65D890A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25CB07BD-F37E-D1B9-4990-7B4AC65D890A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ED5338C-1E63-4764-97C3-9094D785AFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ED5338C-1E63-4764-97C3-9094D785AFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ED5338C-1E63-4764-97C3-9094D785AFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ED5338C-1E63-4764-97C3-9094D785AFEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {801F7578-45BD-42A7-8AD7-19C583FFF4B7}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1192859B-80EB-4269-9B81-5FFBA1A49A60} = {264E1DF3-966B-406E-91A5-21842A19FF15}
+		{25CB07BD-F37E-D1B9-4990-7B4AC65D890A} = {A780EED1-65BC-45BB-8DBC-D1F709115106}
+		{7ED5338C-1E63-4764-97C3-9094D785AFEA} = {38209224-0822-407D-A624-9E31150CE441}
 	EndGlobalSection
 EndGlobal
