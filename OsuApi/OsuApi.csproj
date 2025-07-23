@@ -7,13 +7,24 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Shoukko</Authors>
     <VersionPrefix>0.0.413</VersionPrefix>
-    <Description>osu! api V2 wrapper. (Supported are beatmaps, users, scores apiv2 methods)</Description>
+    <Description>osu! api V2 wrapper</Description>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/Shoukox/OsuApi</RepositoryUrl>
     <PackageTags>osu; api</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Version>0.0.502</Version>
+    <PackageId>OsuApi.Core</PackageId>
+    <Title>osu!api wrapper in C#</Title>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
