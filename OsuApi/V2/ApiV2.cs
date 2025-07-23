@@ -1,4 +1,5 @@
-﻿using OsuApi.V2.Extensions;
+﻿using System.Net;
+using OsuApi.V2.Extensions;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using OsuApi.V2.Clients.Beatmaps;
@@ -100,6 +101,10 @@ namespace OsuApi.V2
             var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken!.Value).ConfigureAwait(false);
             if (!httpResponse.IsSuccessStatusCode)
             {
+                if (httpResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
                 throw new HttpRequestException(
                     $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
             }
