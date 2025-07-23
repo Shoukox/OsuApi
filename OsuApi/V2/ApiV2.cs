@@ -98,7 +98,11 @@ namespace OsuApi.V2
             cancellationToken?.ThrowIfCancellationRequested();
 
             var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken!.Value).ConfigureAwait(false);
-            if (!httpResponse.IsSuccessStatusCode) return null;
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(
+                    $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
+            }
 
 #if DEBUG
             Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
