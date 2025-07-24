@@ -10,8 +10,8 @@ public record GetRankingQueryParameters
     [QueryParameter("country")]
     public string? Country { get; set; }
 
-    [QueryParameter("cursor")]
-    public string? CursorString { get; set; }
+    [QueryParameter("cursor[page]")]
+    public int? CursorPage { get; set; }
     
     /// <summary>
     /// See <see cref="Filter"/>

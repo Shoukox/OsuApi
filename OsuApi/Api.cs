@@ -1,4 +1,5 @@
-﻿using OsuApi.V2;
+﻿using Microsoft.Extensions.Logging;
+using OsuApi.V2;
 using OsuApi.V2.Extensions.Types;
 
 namespace OsuApi
@@ -17,6 +18,7 @@ namespace OsuApi
             };
         }
 
+        public abstract ILogger Logger{ get; set; }
         public abstract ApiVersion CurrentApiVersion();
         public abstract Task<T?> MakeRequestAsync<T>(
             string url,

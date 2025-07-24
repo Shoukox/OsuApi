@@ -2,6 +2,7 @@
 using OsuApi.V2.Extensions;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Logging;
 using OsuApi.V2.Clients.Beatmaps;
 using OsuApi.V2.Clients.Beatmapsets;
 using OsuApi.V2.Clients.Rankings;
@@ -14,19 +15,65 @@ namespace OsuApi.V2
 {
     public class ApiV2 : Api
     {
+        /// <summary>
+        /// Base url address of api endpoint
+        /// </summary>
         public readonly static string ApiMainFunctionsBaseAddress = Api.GetBaseUrl(ApiVersion.ApiV2);
+
+        /// <summary>
+        /// Client id and client secret for authenticating in api
+        /// </summary>
         public readonly ApiConfiguration ApiConfiguration;
+
+        /// <summary>
+        /// Indicates current api version
+        /// </summary>
+        /// <returns>ApiVersion</returns>
         public override ApiVersion CurrentApiVersion() => ApiVersion.ApiV2;
 
+        /// <summary>
+        /// Scores api endpoint
+        /// </summary>
         public ScoresClient Scores { get; init; }
+
+        /// <summary>
+        /// Users api endpoint
+        /// </summary>
         public UsersClient Users { get; init; }
+
+        /// <summary>
+        /// Beatmaps api endpoint
+        /// </summary>
         public BeatmapsClient Beatmaps { get; init; }
+
+        /// <summary>
+        /// Beatmapsets api endpoint
+        /// </summary>
         public BeatmapsetsClient Beatmapsets { get; init; }
+
+        /// <summary>
+        /// Rankings api endpoint
+        /// </summary>
         public RankingsClient Rankings { get; init; }
 
-        protected override HttpClient? HttpClient { get; set; }
-        protected GrantAccess? GrantAccess { get; set; }
+        /// <summary>
+        /// Default console logger
+        /// </summary>
+        public sealed override ILogger Logger { get; set; }
 
+        /// <summary>
+        /// HttpClient for api calls
+        /// </summary>
+        protected sealed override HttpClient? HttpClient { get; set; }
+
+        /// <summary>
+        /// Utility for getting an access token in order to access api
+        /// </summary>
+        private GrantAccess? GrantAccess { get; set; }
+
+        /// <summary>
+        /// Checks if this instance is ready to interact with api
+        /// </summary>
         public bool IsInitialized { get; set; }
 
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
@@ -40,7 +87,10 @@ namespace OsuApi.V2
 
         public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null)
         {
-            HttpClient = httpClient ?? new HttpClient();
+            HttpClient ??= new HttpClient();
+            
+            using var loggerFactory = LoggerFactory.Create((builder) => builder.AddConsole());
+            Logger = loggerFactory.CreateLogger(nameof(ApiV2));
 
             ApiConfiguration = new ApiConfiguration(client_id, client_secret);
             SetDefaultRequestHeaders();
@@ -53,7 +103,7 @@ namespace OsuApi.V2
             Rankings = new RankingsClient(this);
         }
 
-        protected override async Task Initialize()
+        protected sealed override async Task Initialize()
         {
             if (HttpClient == null) throw new Exception();
 
@@ -82,7 +132,9 @@ namespace OsuApi.V2
         /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
         /// <param name="setAuthorizationHeader">Should the auth header be set</param>
         /// <returns>A response of the type T</returns>
-        public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null) where T : class
+        public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod,
+            QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true,
+            bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null) where T : class
         {
             cancellationToken ??= CancellationToken.None;
 
@@ -94,8 +146,11 @@ namespace OsuApi.V2
 
             using var httpRequest = new HttpRequestMessage(httpMethod, url);
             httpRequest.Content = content;
-            if (setAuthorizationHeader) httpRequest.SetAuthorizationHeader($"{GrantAccess.GetTokenType()} {GrantAccess.GetAccessToken()}");
-            if (queryParameters != null) httpRequest.SetQueryParameters(queryParameters.QueryProperties, queryParameters.ParametersClassInstance);
+            if (setAuthorizationHeader)
+                httpRequest.SetAuthorizationHeader($"{GrantAccess.GetTokenType()} {GrantAccess.GetAccessToken()}");
+            if (queryParameters != null)
+                httpRequest.SetQueryParameters(queryParameters.QueryProperties,
+                    queryParameters.ParametersClassInstance);
             cancellationToken?.ThrowIfCancellationRequested();
 
             var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken!.Value).ConfigureAwait(false);
@@ -105,19 +160,20 @@ namespace OsuApi.V2
                 {
                     return null;
                 }
+
                 throw new HttpRequestException(
                     $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
             }
 
-#if DEBUG
-            Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
-#endif
+            Logger.LogDebug("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
 
             return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken!.Value);
         }
 
         #region Dispose
+
         private bool disposedValue;
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -137,6 +193,7 @@ namespace OsuApi.V2
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

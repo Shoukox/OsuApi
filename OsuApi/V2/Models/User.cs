@@ -28,7 +28,7 @@ namespace OsuApi.V2.Users.Models
         /// </summary>
         [JsonPropertyName("id")]
         [NotNull]
-        public long? Id { get; set; }
+        public int? Id { get; set; }
 
         /// <summary>
         /// Has this account been active in the last x months?
