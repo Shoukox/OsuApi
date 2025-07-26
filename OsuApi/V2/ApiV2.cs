@@ -10,6 +10,7 @@ using OsuApi.V2.Clients.Scores;
 using OsuApi.V2.Clients.Users;
 using OsuApi.V2.Extensions.Types;
 using OsuApi.V2.Utilities.GrantAccessUtility;
+
 // ReSharper disable InconsistentNaming
 
 namespace OsuApi.V2
@@ -77,13 +78,24 @@ namespace OsuApi.V2
         /// </summary>
         public bool IsInitialized { get; set; }
 
-        private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
+        /// <summary>
+        /// Currently using api response version
+        /// </summary>
+        public readonly ApiResponseVersion ApiResponseVersion;
 
-        public ApiV2(int client_id, string client_secret, ApiResponseVersion apiResponseVersion, HttpClient? httpClient = null)
+        /// <summary>
+        /// Creates an instance of ApiV2. This method also executes <see cref="Initialize"/>
+        /// </summary>
+        /// <param name="client_id">Your client_id for accessing osu!api v2</param>
+        /// <param name="client_secret">Your client_secret for accessing osu!api v2</param>
+        /// <param name="apiResponseVersion">Response version of api v2</param>
+        /// <param name="httpClient">Used http client for api related requests</param>
+        public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null,
+            ApiResponseVersion apiResponseVersion = ApiResponseVersion.V20240529)
         {
-            HttpClient ??= new HttpClient();
-            _apiResponseVersion = apiResponseVersion;
-            
+            HttpClient = httpClient ?? new HttpClient();
+            ApiResponseVersion = apiResponseVersion;
+
             using var loggerFactory = LoggerFactory.Create((builder) => builder.AddConsole());
             Logger = loggerFactory.CreateLogger(nameof(ApiV2));
 
@@ -113,7 +125,7 @@ namespace OsuApi.V2
             if (HttpClient == null) throw new Exception();
 
             HttpClient.DefaultRequestHeaders.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
-            HttpClient.DefaultRequestHeaders.Add("x-api-version", $"{(int)_apiResponseVersion}");
+            HttpClient.DefaultRequestHeaders.Add("x-api-version", $"{(int)ApiResponseVersion}");
         }
 
         /// <summary>
