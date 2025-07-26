@@ -19,5 +19,5 @@ var api = new ApiV2(configuration.ClientId, configuration.ClientSecret);
 //var a1 = await api.Users.GetUser("@Shoukko", new());
 //var a2 = await api.Beatmaps.GetUserBeatmapScores(970048, 15319810, new());
 var a3 = await api.Rankings.GetRanking(Ruleset.Osu, RankingType.Performance, new(){Country = "uz"});
-var a4 = await api.Scores.GetScores(new(){Ruleset = Ruleset.Osu});
+var a4 = await api.Users.GetUserScores(15319810, ScoreType.Recent, new() {IncludeFails = 1});
 var a = 1;
