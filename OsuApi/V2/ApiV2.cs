@@ -10,6 +10,7 @@ using OsuApi.V2.Clients.Scores;
 using OsuApi.V2.Clients.Users;
 using OsuApi.V2.Extensions.Types;
 using OsuApi.V2.Utilities.GrantAccessUtility;
+// ReSharper disable InconsistentNaming
 
 namespace OsuApi.V2
 {
@@ -78,16 +79,10 @@ namespace OsuApi.V2
 
         private ApiResponseVersion _apiResponseVersion = ApiResponseVersion.V20240529;
 
-        public void SetApiResponseVersion(ApiResponseVersion apiResponseVersion)
-        {
-            if (apiResponseVersion != ApiResponseVersion.V20240529) throw new Exception("Not supported");
-
-            _apiResponseVersion = apiResponseVersion;
-        }
-
-        public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null)
+        public ApiV2(int client_id, string client_secret, ApiResponseVersion apiResponseVersion, HttpClient? httpClient = null)
         {
             HttpClient ??= new HttpClient();
+            _apiResponseVersion = apiResponseVersion;
             
             using var loggerFactory = LoggerFactory.Create((builder) => builder.AddConsole());
             Logger = loggerFactory.CreateLogger(nameof(ApiV2));
@@ -172,11 +167,11 @@ namespace OsuApi.V2
 
         #region Dispose
 
-        private bool disposedValue;
+        private bool _disposedValue;
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -184,7 +179,7 @@ namespace OsuApi.V2
                     if (GrantAccess != null) GrantAccess.Dispose();
                 }
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
