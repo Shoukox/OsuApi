@@ -11,26 +11,32 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
     private CustomConsoleFormatterOptions _formatterOptions;
 
     public CustomConsoleFormatter(IOptionsMonitor<CustomConsoleFormatterOptions> options) : base(
-        "CustomConsoleFormatter") =>
+        "CustomConsoleFormatter")
+    {
         (_optionsReloadToken, _formatterOptions) =
-        (options.OnChange(ReloadLoggerOptions), options.CurrentValue);
+            (options.OnChange(ReloadLoggerOptions), options.CurrentValue);
+    }
 
-    private void ReloadLoggerOptions(CustomConsoleFormatterOptions options) =>
+    public void Dispose()
+    {
+        _optionsReloadToken?.Dispose();
+    }
+
+    private void ReloadLoggerOptions(CustomConsoleFormatterOptions options)
+    {
         _formatterOptions = options;
+    }
 
     public override void Write<TState>(
         in LogEntry<TState> logEntry,
         IExternalScopeProvider? scopeProvider,
         TextWriter textWriter)
     {
-        string? message =
+        var message =
             logEntry.Formatter?.Invoke(
                 logEntry.State, logEntry.Exception);
 
-        if (message is null)
-        {
-            return;
-        }
+        if (message is null) return;
 
         WriteLogLevel(textWriter, logEntry.LogLevel);
         WriteTimestamp(textWriter);
@@ -41,7 +47,7 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
 
     private void WriteLogLevel(TextWriter textWriter, LogLevel logLevel)
     {
-        string foregroundColor = logLevel switch
+        var foregroundColor = logLevel switch
         {
             LogLevel.Trace => GetForegroundColorEscapeCode(ConsoleColor.Cyan),
             LogLevel.Debug => GetForegroundColorEscapeCode(ConsoleColor.Cyan),
@@ -51,11 +57,11 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
             LogLevel.Critical => GetForegroundColorEscapeCode(ConsoleColor.Red),
             LogLevel.None => GetForegroundColorEscapeCode(ConsoleColor.White),
 
-            _ => throw new NotSupportedException(),
+            _ => throw new NotSupportedException()
         };
 
-        string logLevelString = Enum.GetName(logLevel) ?? "_";
-        string message = $"[{logLevelString[0]}]";
+        var logLevelString = Enum.GetName(logLevel) ?? "_";
+        var message = $"[{logLevelString[0]}]";
 
         textWriter.Write(foregroundColor);
         textWriter.Write(message);
@@ -66,10 +72,10 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
         if (_formatterOptions.TimestampFormat == null)
             return;
 
-        DateTime dateTime = _formatterOptions.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
-        string timestamp = dateTime.ToString(_formatterOptions.TimestampFormat);
+        var dateTime = _formatterOptions.UseUtcTimestamp ? DateTime.UtcNow : DateTime.Now;
+        var timestamp = dateTime.ToString(_formatterOptions.TimestampFormat);
 
-        string message = $"[{timestamp}]";
+        var message = $"[{timestamp}]";
 
         textWriter.Write(GetForegroundColorEscapeCode(ConsoleColor.Green));
         textWriter.Write(message);
@@ -77,7 +83,7 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
 
     private void WriteObjectName(TextWriter textWriter, string category)
     {
-        string message = $"[{category}]";
+        var message = $"[{category}]";
 
         textWriter.Write(GetForegroundColorEscapeCode(ConsoleColor.Magenta));
         textWriter.Write(message);
@@ -85,7 +91,7 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
 
     private void WriteOutputMessage(TextWriter textWriter, string message)
     {
-        string outputMessage = ": " + message;
+        var outputMessage = ": " + message;
         textWriter.Write(GetForegroundColorEscapeCode(ConsoleColor.White));
         textWriter.WriteLine(outputMessage);
     }
@@ -95,11 +101,12 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
         if (exception is null) return;
 
         textWriter.Write(GetForegroundColorEscapeCode(ConsoleColor.DarkMagenta));
-        textWriter.WriteLine("Exception: {0}", exception?.ToString());
+        textWriter.WriteLine("Exception: {0}", exception);
     }
 
-    static string GetForegroundColorEscapeCode(ConsoleColor color) =>
-        color switch
+    private static string GetForegroundColorEscapeCode(ConsoleColor color)
+    {
+        return color switch
         {
             ConsoleColor.Black => "\x1B[30m",
             ConsoleColor.DarkRed => "\x1B[31m",
@@ -118,9 +125,11 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
             ConsoleColor.White => "\x1B[1m\x1B[37m",
             _ => ""
         };
+    }
 
-    static string GetBackgroundColorEscapeCode(ConsoleColor color) =>
-        color switch
+    private static string GetBackgroundColorEscapeCode(ConsoleColor color)
+    {
+        return color switch
         {
             ConsoleColor.Black => "\x1B[40m",
             ConsoleColor.DarkRed => "\x1B[41m",
@@ -132,6 +141,5 @@ internal class CustomConsoleFormatter : ConsoleFormatter, IDisposable
             ConsoleColor.Gray => "\x1B[47m",
             _ => ""
         };
-
-    public void Dispose() => _optionsReloadToken?.Dispose();
+    }
 }

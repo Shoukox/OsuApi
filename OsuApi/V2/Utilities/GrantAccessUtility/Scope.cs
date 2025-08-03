@@ -1,7 +1,6 @@
-﻿namespace OsuApi.V2.Utilities.GrantAccessUtility
+﻿namespace OsuApi.V2.Utilities.GrantAccessUtility;
+
+internal class Scope
 {
-    class Scope
-    {
-        public const string Public = "public";
-    }
+    public const string Public = "public";
 }

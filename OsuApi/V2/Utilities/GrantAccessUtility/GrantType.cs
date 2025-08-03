@@ -1,7 +1,6 @@
-﻿namespace OsuApi.V2.Utilities.GrantAccessUtility
+﻿namespace OsuApi.V2.Utilities.GrantAccessUtility;
+
+internal class GrantType
 {
-    class GrantType
-    {
-        public const string ClientCredentials = "client_credentials";
-    }
+    public const string ClientCredentials = "client_credentials";
 }

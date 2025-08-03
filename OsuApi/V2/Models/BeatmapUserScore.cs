@@ -1,13 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OsuApi.V2.Models
-{
-    public record BeatmapUserScore
-    {
-        [JsonPropertyName("position")]
-        public int? Position { get; set; }
+namespace OsuApi.V2.Models;
 
-        [JsonPropertyName("score")]
-        public Score? Score { get; set; }
-    }
+public record BeatmapUserScore
+{
+    [JsonPropertyName("position")] public int? Position { get; set; }
+
+    [JsonPropertyName("score")] public Score? Score { get; set; }
 }

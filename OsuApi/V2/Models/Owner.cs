@@ -1,13 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OsuApi.V2.Users.Models
-{
-    public record Owner
-    {
-        [JsonPropertyName("id")]
-        public int? Id { get; init; }
+namespace OsuApi.V2.Users.Models;
 
-        [JsonPropertyName("username")]
-        public string? Username { get; init; }
-    }
+public record Owner
+{
+    [JsonPropertyName("id")] public int? Id { get; init; }
+
+    [JsonPropertyName("username")] public string? Username { get; init; }
 }

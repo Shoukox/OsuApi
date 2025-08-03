@@ -1,13 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OsuApi.V2.Users.Models
-{
-    public record Country
-    {
-        [JsonPropertyName("code")]
-        public string? Code { get; set; }
+namespace OsuApi.V2.Users.Models;
 
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-    }
+public record Country
+{
+    [JsonPropertyName("code")] public string? Code { get; set; }
+
+    [JsonPropertyName("name")] public string? Name { get; set; }
 }

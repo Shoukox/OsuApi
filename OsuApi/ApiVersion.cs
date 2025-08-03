@@ -1,8 +1,7 @@
-﻿namespace OsuApi
+﻿namespace OsuApi;
+
+public enum ApiVersion
 {
-    public enum ApiVersion
-    {
-        ApiV1 = 1,
-        ApiV2 = 2
-    }
+    ApiV1 = 1,
+    ApiV2 = 2
 }

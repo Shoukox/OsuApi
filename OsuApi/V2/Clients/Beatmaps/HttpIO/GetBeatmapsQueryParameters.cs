@@ -1,10 +1,8 @@
 ﻿using OsuApi.V2.Extensions.Attributes;
 
-namespace OsuApi.V2.Clients.Beatmaps.HttpIO
+namespace OsuApi.V2.Clients.Beatmaps.HttpIO;
+
+public record GetBeatmapsQueryParameters
 {
-    public record GetBeatmapsQueryParameters
-    {
-        [QueryParameter("ids[]")]
-        public int[]? BeatmapIds { get; set; }
-    }
+    [QueryParameter("ids[]")] public int[]? BeatmapIds { get; set; }
 }

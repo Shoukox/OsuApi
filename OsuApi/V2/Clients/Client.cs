@@ -1,8 +1,11 @@
-﻿namespace OsuApi.V2.Clients
+﻿namespace OsuApi.V2.Clients;
+
+public abstract class Client
 {
-    public abstract class Client
+    protected Api Api;
+
+    public Client(Api api)
     {
-        protected Api Api;
-        public Client(Api api) => Api = api;
+        Api = api;
     }
 }

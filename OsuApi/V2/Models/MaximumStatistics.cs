@@ -1,13 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OsuApi.V2.Models
-{
-    public record MaximumStatistics
-    {
-        [JsonPropertyName("great")]
-        public int? Great { get; set; }
+namespace OsuApi.V2.Models;
 
-        [JsonPropertyName("legacy_combo_increase")]
-        public int? LegacyComboIncrease { get; set; }
-    }
+public record MaximumStatistics
+{
+    [JsonPropertyName("great")] public int? Great { get; set; }
+
+    [JsonPropertyName("legacy_combo_increase")]
+    public int? LegacyComboIncrease { get; set; }
 }

@@ -1,8 +1,7 @@
-﻿namespace OsuApi.V2.Users.Models
+﻿namespace OsuApi.V2.Users.Models;
+
+public record Key
 {
-    public record Key
-    {
-        public const string Id = "id";
-        public const string Username = "username";
-    }
+    public const string Id = "id";
+    public const string Username = "username";
 }

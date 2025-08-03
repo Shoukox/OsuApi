@@ -1,16 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OsuApi.V2.Users.Models
-{
-    public record RankHistory
-    {
-        /// <summary>
-        /// See <see cref="V2.Models.Ruleset"/>
-        /// </summary>
-        [JsonPropertyName("mode")]
-        public string? Mode { get; set; }
+namespace OsuApi.V2.Users.Models;
 
-        [JsonPropertyName("data")]
-        public int[]? Data { get; set; }
-    }
+public record RankHistory
+{
+    /// <summary>
+    ///     See <see cref="V2.Models.Ruleset" />
+    /// </summary>
+    [JsonPropertyName("mode")]
+    public string? Mode { get; set; }
+
+    [JsonPropertyName("data")] public int[]? Data { get; set; }
 }

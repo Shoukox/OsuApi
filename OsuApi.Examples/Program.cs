@@ -1,13 +1,13 @@
-﻿using OsuApi.V2;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.Extensions.Logging;
-using OsuApi.V2.Models;
+﻿using System.Text.Json;
 using OsuApi.Examples;
+using OsuApi.V2;
+using OsuApi.V2.Clients.Rankings.HttpIO;
+using OsuApi.V2.Clients.Users.HttpIO;
+using OsuApi.V2.Models;
 using OsuApi.V2.Users.Models;
 
 // get config from json
-string path = "appsettings.json";
+var path = "appsettings.json";
 if (!File.Exists(path))
     throw new Exception(
         "You should firstly create an appsettings.json and pass your client_id and client_secret into it!");
@@ -18,6 +18,8 @@ if (configuration == null) throw new Exception("Bad appsettings.json");
 var api = new ApiV2(configuration.ClientId, configuration.ClientSecret);
 //var a1 = await api.Users.GetUser("@Shoukko", new());
 //var a2 = await api.Beatmaps.GetUserBeatmapScores(970048, 15319810, new());
-var a3 = await api.Rankings.GetRanking(Ruleset.Osu, RankingType.Performance, new(){Country = "uz"});
-var a4 = await api.Users.GetUserScores(15319810, ScoreType.Recent, new() {IncludeFails = 1});
+var a3 = await api.Rankings.GetRanking(Ruleset.Osu, RankingType.Performance,
+    new GetRankingQueryParameters { Country = "uz" });
+var a4 = await api.Users.GetUserScores(15319810, ScoreType.Recent,
+    new GetUserScoreQueryParameters { IncludeFails = 1 });
 var a = 1;
