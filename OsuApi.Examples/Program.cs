@@ -21,5 +21,5 @@ var api = new ApiV2(configuration.ClientId, configuration.ClientSecret);
 var a3 = await api.Rankings.GetRanking(Ruleset.Osu, RankingType.Performance,
     new GetRankingQueryParameters { Country = "uz" });
 var a4 = await api.Users.GetUserScores(15319810, ScoreType.Recent,
-    new GetUserScoreQueryParameters { IncludeFails = 1 });
+    new GetUserScoreQueryParameters { IncludeFails = 1, Limit = 1});
 var a = 1;

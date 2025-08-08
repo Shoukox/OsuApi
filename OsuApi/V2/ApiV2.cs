@@ -2,6 +2,8 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 using OsuApi.V2.Clients.Beatmaps;
 using OsuApi.V2.Clients.Beatmapsets;
 using OsuApi.V2.Clients.Rankings;
@@ -45,7 +47,12 @@ public class ApiV2 : Api
         HttpClient = httpClient ?? new HttpClient();
         ApiResponseVersion = apiResponseVersion;
 
-        using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        using var loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.AddConsole();
+            string? logLevel = Environment.GetEnvironmentVariable("Logger.LogLevel");
+            builder.SetMinimumLevel(logLevel == "Debug" ? LogLevel.Debug: LogLevel.Information);
+        });
         Logger = loggerFactory.CreateLogger(nameof(ApiV2));
 
         ApiConfiguration = new ApiConfiguration(client_id, client_secret);
