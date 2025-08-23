@@ -1,10 +1,13 @@
 ﻿using System.Net.Http.Json;
+using Microsoft.Extensions.Logging;
 using OsuApi.V2.Utilities.GrantAccessUtility.HttpIO;
+using SosuBot.Logging;
 
 namespace OsuApi.V2.Utilities.GrantAccessUtility;
 
 public class GrantAccess : IDisposable
 {
+    private static readonly ILogger Logger = ApplicationLogging.CreateLogger(nameof(GrantAccess));
     public const string ApiGrantAccessBaseAddress = "https://osu.ppy.sh/oauth/token";
 
     private readonly Api _api;
@@ -33,9 +36,7 @@ public class GrantAccess : IDisposable
         if (_grantAccessResponse == null) throw new Exception();
 
         UpdateTimers();
-#if DEBUG
-        Console.WriteLine("gotToken {0}", DateTime.Now.ToString("g"));
-#endif
+        Logger.LogDebug("gotToken {0}", DateTime.Now.ToString("g"));
     }
 
     private TimeSpan GetLeftTimeForNextUpdate()

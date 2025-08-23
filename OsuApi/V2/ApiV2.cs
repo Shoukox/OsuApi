@@ -2,8 +2,6 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Options;
 using OsuApi.V2.Clients.Beatmaps;
 using OsuApi.V2.Clients.Beatmapsets;
 using OsuApi.V2.Clients.Rankings;
@@ -12,6 +10,7 @@ using OsuApi.V2.Clients.Users;
 using OsuApi.V2.Extensions;
 using OsuApi.V2.Extensions.Types;
 using OsuApi.V2.Utilities.GrantAccessUtility;
+using SosuBot.Logging;
 
 // ReSharper disable InconsistentNaming
 
@@ -25,6 +24,11 @@ public class ApiV2 : Api
     public static readonly string ApiMainFunctionsBaseAddress = GetBaseUrl(ApiVersion.ApiV2);
 
     /// <summary>
+    /// Logger
+    /// </summary>
+    public sealed override ILogger Logger { get; set; } 
+    
+    /// <summary>
     ///     Client id and client secret for authenticating in api
     /// </summary>
     public readonly ApiConfiguration ApiConfiguration;
@@ -33,7 +37,7 @@ public class ApiV2 : Api
     ///     Currently using api response version
     /// </summary>
     public readonly ApiResponseVersion ApiResponseVersion;
-
+    
     /// <summary>
     ///     Creates an instance of ApiV2. This method also executes <see cref="Initialize" />
     /// </summary>
@@ -47,13 +51,14 @@ public class ApiV2 : Api
         HttpClient = httpClient ?? new HttpClient();
         ApiResponseVersion = apiResponseVersion;
 
-        using var loggerFactory = LoggerFactory.Create(builder =>
-        {
-            builder.AddConsole();
-            string? logLevel = Environment.GetEnvironmentVariable("Logger.LogLevel");
-            builder.SetMinimumLevel(logLevel == "Debug" ? LogLevel.Debug: LogLevel.Information);
-        });
-        Logger = loggerFactory.CreateLogger(nameof(ApiV2));
+        // using var loggerFactory = LoggerFactory.Create(builder =>
+        // {
+        //     builder.AddConsole();
+        //     string? logLevel = Environment.GetEnvironmentVariable("Logger.LogLevel");
+        //     builder.SetMinimumLevel(logLevel == "Debug" ? LogLevel.Debug: LogLevel.Information);
+        // });
+        // Logger = loggerFactory.CreateLogger(nameof(ApiV2));
+        Logger = ApplicationLogging.CreateLogger(nameof(ApiV2));
 
         ApiConfiguration = new ApiConfiguration(client_id, client_secret);
         SetDefaultRequestHeaders();
@@ -90,11 +95,6 @@ public class ApiV2 : Api
     ///     Rankings api endpoint
     /// </summary>
     public RankingsClient Rankings { get; init; }
-
-    /// <summary>
-    ///     Default console logger
-    /// </summary>
-    public sealed override ILogger Logger { get; set; }
 
     /// <summary>
     ///     HttpClient for api calls
@@ -179,7 +179,7 @@ public class ApiV2 : Api
                 $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
         }
 
-        Logger.LogDebug("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
+        Logger.LogTrace("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
 
         return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken!.Value);
     }
