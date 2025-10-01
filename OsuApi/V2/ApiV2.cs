@@ -10,7 +10,6 @@ using OsuApi.V2.Clients.Users;
 using OsuApi.V2.Extensions;
 using OsuApi.V2.Extensions.Types;
 using OsuApi.V2.Utilities.GrantAccessUtility;
-using SosuBot.Logging;
 
 // ReSharper disable InconsistentNaming
 
@@ -37,28 +36,35 @@ public class ApiV2 : Api
     ///     Currently using api response version
     /// </summary>
     public readonly ApiResponseVersion ApiResponseVersion;
-    
+
     /// <summary>
     ///     Creates an instance of ApiV2. This method also executes <see cref="Initialize" />
     /// </summary>
     /// <param name="client_id">Your client_id for accessing osu!api v2</param>
     /// <param name="client_secret">Your client_secret for accessing osu!api v2</param>
+    /// <param name="logger">Used logger. If not provided, a default instance from <see cref="LoggerFactory"/> with console logging and logging_level=debug will be used</param>
     /// <param name="apiResponseVersion">Response version of api v2</param>
     /// <param name="httpClient">Used http client for api related requests</param>
-    public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null,
+    public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null, ILogger? logger = null,
         ApiResponseVersion apiResponseVersion = ApiResponseVersion.V20240529)
     {
         HttpClient = httpClient ?? new HttpClient();
         ApiResponseVersion = apiResponseVersion;
 
-        // using var loggerFactory = LoggerFactory.Create(builder =>
-        // {
-        //     builder.AddConsole();
-        //     string? logLevel = Environment.GetEnvironmentVariable("Logger.LogLevel");
-        //     builder.SetMinimumLevel(logLevel == "Debug" ? LogLevel.Debug: LogLevel.Information);
-        // });
-        // Logger = loggerFactory.CreateLogger(nameof(ApiV2));
-        Logger = ApplicationLogging.CreateLogger(nameof(ApiV2));
+        // Setup default logger if needed
+        if (logger == null)
+        {
+            using var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddSimpleConsole(options => options.SingleLine = true);
+                builder.SetMinimumLevel(LogLevel.Debug);
+            });
+            Logger = loggerFactory.CreateLogger(nameof(ApiV2));
+        }
+        else
+        {
+            Logger = logger;
+        }
 
         ApiConfiguration = new ApiConfiguration(client_id, client_secret);
         SetDefaultRequestHeaders();

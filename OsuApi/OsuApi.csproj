@@ -53,10 +53,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.8" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\SosuBot.Logging\SosuBot.Logging.csproj" />
+      <PackageReference Include="Serilog.Extensions.Logging.File" Version="9.0.0-dev-02303" />
     </ItemGroup>
 
 </Project>
