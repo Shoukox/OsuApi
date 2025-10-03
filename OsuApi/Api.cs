@@ -17,7 +17,7 @@ public abstract class Api : IRequestMaker, IDisposable
     /// <summary>
     /// A logger used in api classes to log various information
     /// </summary>
-    public abstract ILogger Logger { get; set; }
+    internal abstract ILogger Logger { get; set; }
     /// <summary>
     /// Support for a disposable pattern
     /// </summary>

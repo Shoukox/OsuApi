@@ -78,7 +78,7 @@ public class ApiV2 : Api
     /// <summary>
     ///     Logger
     /// </summary>
-    public sealed override ILogger Logger { get; set; }
+    internal sealed override ILogger Logger { get; set; }
 
     /// <summary>
     ///     Scores api endpoint

@@ -15,5 +15,3 @@ if (configuration == null) throw new Exception("Bad appsettings.json");
 // api v2
 var api = new ApiV2(configuration.ClientId, configuration.ClientSecret);
 var a1 = await api.Users.GetUser("@Shoukko", new GetUserQueryParameters());
-var a2 = await api.Users.GetUserScores(37072030, ScoreType.Recent,
-    new GetUserScoreQueryParameters { IncludeFails = 1, Limit = 100 });
