@@ -26,7 +26,6 @@ public sealed class UsersClient : Client
         var response = await Api.MakeRequestAsync<UserExtend>(
             ApiV2.ApiMainFunctionsBaseAddress + $"/me/{mode ?? ""}",
             HttpMethod.Get,
-            null,
             cancellationToken: cancellationToken
         );
         if (response is null) return null;
@@ -45,7 +44,6 @@ public sealed class UsersClient : Client
         var response = await Api.MakeRequestAsync<KudosuHistory[]>(
             ApiV2.ApiMainFunctionsBaseAddress + $"/users/{user}/kudosu",
             HttpMethod.Get,
-            null,
             cancellationToken: cancellationToken
         );
         if (response is null) return null;

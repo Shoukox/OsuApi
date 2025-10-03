@@ -23,11 +23,6 @@ public class ApiV2 : Api
     public static readonly string ApiMainFunctionsBaseAddress = GetBaseUrl(ApiVersion.ApiV2);
 
     /// <summary>
-    /// Logger
-    /// </summary>
-    public sealed override ILogger Logger { get; set; } 
-    
-    /// <summary>
     ///     Client id and client secret for authenticating in api
     /// </summary>
     public readonly ApiConfiguration ApiConfiguration;
@@ -42,7 +37,10 @@ public class ApiV2 : Api
     /// </summary>
     /// <param name="client_id">Your client_id for accessing osu!api v2</param>
     /// <param name="client_secret">Your client_secret for accessing osu!api v2</param>
-    /// <param name="logger">Used logger. If not provided, a default instance from <see cref="LoggerFactory"/> with console logging and logging_level=debug will be used</param>
+    /// <param name="logger">
+    ///     Used logger. If not provided, a default instance from <see cref="LoggerFactory" /> with console
+    ///     logging and logging_level=debug will be used
+    /// </param>
     /// <param name="apiResponseVersion">Response version of api v2</param>
     /// <param name="httpClient">Used http client for api related requests</param>
     public ApiV2(int client_id, string client_secret, HttpClient? httpClient = null, ILogger? logger = null,
@@ -76,6 +74,11 @@ public class ApiV2 : Api
         Beatmapsets = new BeatmapsetsClient(this);
         Rankings = new RankingsClient(this);
     }
+
+    /// <summary>
+    ///     Logger
+    /// </summary>
+    public sealed override ILogger Logger { get; set; }
 
     /// <summary>
     ///     Scores api endpoint
