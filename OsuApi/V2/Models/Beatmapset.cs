@@ -5,74 +5,74 @@ namespace OsuApi.V2.Users.Models;
 
 public record Beatmapset
 {
-    [JsonPropertyName("artist")] public string? Artist { get; init; }
+    [JsonPropertyName("artist")] public string? Artist { get; set; }
 
-    [JsonPropertyName("artist_unicode")] public string? ArtistUnicode { get; init; }
+    [JsonPropertyName("artist_unicode")] public string? ArtistUnicode { get; set; }
 
-    [JsonPropertyName("covers")] public Covers? Covers { get; init; }
+    [JsonPropertyName("covers")] public Covers? Covers { get; set; }
 
-    [JsonPropertyName("creator")] public string? Creator { get; init; }
+    [JsonPropertyName("creator")] public string? Creator { get; set; }
 
-    [JsonPropertyName("favourite_count")] public int? FavouriteCount { get; init; }
+    [JsonPropertyName("favourite_count")] public int? FavouriteCount { get; set; }
 
-    [JsonPropertyName("hype")] public Hype? Hype { get; init; }
+    [JsonPropertyName("hype")] public Hype? Hype { get; set; }
 
-    [JsonPropertyName("id")] [NotNull] public int? Id { get; init; }
+    [JsonPropertyName("id")] [NotNull] public int? Id { get; set; }
 
-    [JsonPropertyName("nsfw")] public bool? Nsfw { get; init; }
+    [JsonPropertyName("nsfw")] public bool? Nsfw { get; set; }
 
-    [JsonPropertyName("offset")] public int? Offset { get; init; }
+    [JsonPropertyName("offset")] public int? Offset { get; set; }
 
-    [JsonPropertyName("play_count")] public int? PlayCount { get; init; }
+    [JsonPropertyName("play_count")] public int? PlayCount { get; set; }
 
-    [JsonPropertyName("preview_url")] public string? PreviewUrl { get; init; }
+    [JsonPropertyName("preview_url")] public string? PreviewUrl { get; set; }
 
-    [JsonPropertyName("source")] public string? Source { get; init; }
+    [JsonPropertyName("source")] public string? Source { get; set; }
 
-    [JsonPropertyName("spotlight")] public bool? Spotlight { get; init; }
+    [JsonPropertyName("spotlight")] public bool? Spotlight { get; set; }
 
-    [JsonPropertyName("status")] public string? Status { get; init; }
+    [JsonPropertyName("status")] public string? Status { get; set; }
 
-    [JsonPropertyName("title")] public string? Title { get; init; }
+    [JsonPropertyName("title")] public string? Title { get; set; }
 
-    [JsonPropertyName("title_unicode")] public string? TitleUnicode { get; init; }
+    [JsonPropertyName("title_unicode")] public string? TitleUnicode { get; set; }
 
-    [JsonPropertyName("track_id")] public int? TrackId { get; init; }
+    [JsonPropertyName("track_id")] public int? TrackId { get; set; }
 
-    [JsonPropertyName("user_id")] public int? UserId { get; init; }
+    [JsonPropertyName("user_id")] public int? UserId { get; set; }
 
-    [JsonPropertyName("video")] public bool? Video { get; init; }
+    [JsonPropertyName("video")] public bool? Video { get; set; }
 
     [JsonPropertyName("nominations_summary")]
-    public NominationsSummary? NominationsSummary { get; init; }
+    public NominationsSummary? NominationsSummary { get; set; }
 
-    [JsonPropertyName("rating")] public float? Rating { get; init; }
+    [JsonPropertyName("rating")] public float? Rating { get; set; }
 
-    [JsonPropertyName("availability")] public Availability? Availability { get; init; }
+    [JsonPropertyName("availability")] public Availability? Availability { get; set; }
 
-    [JsonPropertyName("beatmaps")] public List<Beatmap>? Beatmaps { get; init; }
+    [JsonPropertyName("beatmaps")] public List<Beatmap>? Beatmaps { get; set; }
 
-    [JsonPropertyName("converts")] public List<Beatmap>? Converts { get; init; }
+    [JsonPropertyName("converts")] public List<Beatmap>? Converts { get; set; }
 
     [JsonPropertyName("current_nominations")]
-    public List<object>? CurrentNominations { get; init; }
+    public List<object>? CurrentNominations { get; set; }
 
-    [JsonPropertyName("description")] public Description? Description { get; init; }
+    [JsonPropertyName("description")] public Description? Description { get; set; }
 
-    [JsonPropertyName("genre")] public Genre? Genre { get; init; }
+    [JsonPropertyName("genre")] public Genre? Genre { get; set; }
 
-    [JsonPropertyName("language")] public Language? Language { get; init; }
+    [JsonPropertyName("language")] public Language? Language { get; set; }
 
-    [JsonPropertyName("pack_tags")] public List<string>? PackTags { get; init; }
+    [JsonPropertyName("pack_tags")] public List<string>? PackTags { get; set; }
 
-    [JsonPropertyName("ratings")] public List<int>? Ratings { get; init; }
+    [JsonPropertyName("ratings")] public List<int>? Ratings { get; set; }
 
     [JsonPropertyName("recent_favourites")]
-    public List<User>? RecentFavourites { get; init; }
+    public List<User>? RecentFavourites { get; set; }
 
-    [JsonPropertyName("related_users")] public List<User>? RelatedUsers { get; init; }
+    [JsonPropertyName("related_users")] public List<User>? RelatedUsers { get; set; }
 
-    [JsonPropertyName("related_tags")] public List<object>? RelatedTags { get; init; }
+    [JsonPropertyName("related_tags")] public List<object>? RelatedTags { get; set; }
 
-    [JsonPropertyName("user")] public User? User { get; init; }
+    [JsonPropertyName("user")] public User? User { get; set; }
 }
