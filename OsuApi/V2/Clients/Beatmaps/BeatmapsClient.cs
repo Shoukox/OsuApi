@@ -112,6 +112,7 @@ public sealed class BeatmapsClient : Client
     /// </summary>
     /// <param name="beatmap">Beatmap id.</param>
     /// <param name="parameters">Body Parameters</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     public async Task<GetBeatmapAttributesResponse?> GetBeatmapAttributes(long beatmap,

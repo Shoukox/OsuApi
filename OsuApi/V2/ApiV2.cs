@@ -157,6 +157,7 @@ public class ApiV2 : Api
     /// <param name="content">Body content of the request</param>
     /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
     /// <param name="setAuthorizationHeader">Should the auth header be set</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A response of the type T</returns>
     public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod,
         QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true,
@@ -168,7 +169,7 @@ public class ApiV2 : Api
         if (HttpClient == null) throw new Exception();
 
         if (updateTokenIfNeeded) await GrantAccess.UpdateTokenIfNeeded();
-        cancellationToken?.ThrowIfCancellationRequested();
+        cancellationToken.Value.ThrowIfCancellationRequested();
 
         using var httpRequest = new HttpRequestMessage(httpMethod, url);
         httpRequest.Content = content;
@@ -177,9 +178,9 @@ public class ApiV2 : Api
         if (queryParameters != null)
             httpRequest.SetQueryParameters(queryParameters.QueryProperties,
                 queryParameters.ParametersClassInstance);
-        cancellationToken?.ThrowIfCancellationRequested();
+        cancellationToken.Value.ThrowIfCancellationRequested();
 
-        var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken!.Value).ConfigureAwait(false);
+        var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken.Value).ConfigureAwait(false);
         if (!httpResponse.IsSuccessStatusCode)
         {
             if (httpResponse.StatusCode == HttpStatusCode.NotFound) return null;
@@ -188,9 +189,9 @@ public class ApiV2 : Api
                 $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
         }
 
-        Logger.LogTrace("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
+        Logger.LogTrace("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken.Value));
 
-        return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken!.Value);
+        return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken.Value);
     }
 
     #region Dispose

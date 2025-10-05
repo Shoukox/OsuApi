@@ -5,26 +5,27 @@ using OsuApi.V2.Extensions.Types;
 namespace OsuApi;
 
 /// <summary>
-/// A base class for osu!api 
+///     A base class for osu!api
 /// </summary>
 public abstract class Api : IRequestMaker, IDisposable
 {
     /// <summary>
-    /// An http client for an api communication
+    ///     An http client for an api communication
     /// </summary>
     protected abstract HttpClient? HttpClient { get; set; }
 
     /// <summary>
-    /// A logger used in api classes to log various information
+    ///     A logger used in api classes to log various information
     /// </summary>
     internal abstract ILogger Logger { get; set; }
+
     /// <summary>
-    /// Support for a disposable pattern
+    ///     Support for a disposable pattern
     /// </summary>
     public abstract void Dispose();
 
     /// <summary>
-    /// Base method for any api requests
+    ///     Base method for any api requests
     /// </summary>
     /// <param name="url">Request url</param>
     /// <param name="httpMethod">Request http method</param>
@@ -45,13 +46,15 @@ public abstract class Api : IRequestMaker, IDisposable
         CancellationToken? cancellationToken = null) where T : class;
 
     /// <summary>
-    /// A method to initialize an api
+    ///     A method to initialize an api
     /// </summary>
-    /// <returns><see cref="Task"/></returns>
+    /// <returns>
+    ///     <see cref="Task" />
+    /// </returns>
     protected abstract Task Initialize();
 
     /// <summary>
-    /// Get base api endpoint
+    ///     Get base api endpoint
     /// </summary>
     /// <param name="apiVersion">Api version (V1/V2)</param>
     /// <returns>Base url as string</returns>
@@ -67,7 +70,7 @@ public abstract class Api : IRequestMaker, IDisposable
     }
 
     /// <summary>
-    /// Current api version
+    ///     Current api version
     /// </summary>
     /// <returns>Api version</returns>
     public abstract ApiVersion CurrentApiVersion();
