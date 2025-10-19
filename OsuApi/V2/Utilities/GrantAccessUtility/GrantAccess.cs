@@ -61,8 +61,14 @@ public class GrantAccess : IDisposable
         if (!ShouldUpdateToken()) return;
         if (!await _semaphore.WaitAsync(0)) return;
 
-        await ClientCredentialGrant();
-        _semaphore.Release();
+        try
+        {
+            await ClientCredentialGrant();
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     public string GetTokenType()

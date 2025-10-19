@@ -121,6 +121,11 @@ public class ApiV2 : Api
     public bool IsInitialized { get; set; }
 
     /// <summary>
+    ///     Counts requests done to osu!api
+    /// </summary>
+    private static ulong RequestsDone;
+
+    /// <summary>
     ///     Indicates current api version
     /// </summary>
     /// <returns>ApiVersion</returns>
@@ -181,6 +186,11 @@ public class ApiV2 : Api
         cancellationToken.Value.ThrowIfCancellationRequested();
 
         var httpResponse = await HttpClient.SendAsync(httpRequest, cancellationToken.Value).ConfigureAwait(false);
+        if (Interlocked.Increment(ref RequestsDone) % 10 == 0)
+        {
+            Logger.LogInformation($"OsuApi req: {RequestsDone}");
+        }
+
         if (!httpResponse.IsSuccessStatusCode)
         {
             if (httpResponse.StatusCode == HttpStatusCode.NotFound) return null;
@@ -190,7 +200,6 @@ public class ApiV2 : Api
         }
 
         Logger.LogTrace("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken.Value));
-
         return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken.Value);
     }
 
