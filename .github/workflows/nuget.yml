@@ -1,0 +1,37 @@
+name: .NET Publish NuGet
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore
+        run: dotnet restore OsuApi
+
+      - name: Build (Release)
+        run: dotnet build OsuApi/OsuApi.csproj --no-restore --configuration Release
+
+      - name: Pack
+        run: dotnet pack OsuApi/OsuApi.csproj --no-restore --configuration Release -o ./nupkgs
+
+      - name: Publish to nuget.org
+        run: |
+          dotnet nuget push ./nupkgs/*.nupkg \
+            --api-key ${{ secrets.NUGET_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
