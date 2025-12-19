@@ -14,10 +14,10 @@ public record Score
     [JsonPropertyName("build_id")] public int? BuildId { get; set; }
 
     [JsonPropertyName("classic_total_score")]
-    public int? ClassicTotalScore { get; set; }
+    public ulong? ClassicTotalScore { get; set; }
 
     [JsonPropertyName("total_score_without_mods")]
-    public int? TotalScoreWithoutMods { get; set; }
+    public ulong? TotalScoreWithoutMods { get; set; }
 
     [JsonPropertyName("ended_at")] public DateTime? EndedAt { get; set; }
 
@@ -32,7 +32,7 @@ public record Score
     [JsonPropertyName("legacy_score_id")] public long? LegacyScoreId { get; set; }
 
     [JsonPropertyName("legacy_total_score")]
-    public int? LegacyTotalScore { get; set; }
+    public ulong? LegacyTotalScore { get; set; }
 
     [JsonPropertyName("max_combo")] public int? MaxCombo { get; set; }
 

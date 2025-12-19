@@ -1,8 +1,9 @@
-﻿using System.Text.Json;
-using OsuApi.Examples;
+﻿using OsuApi.Examples;
 using OsuApi.V2;
+using OsuApi.V2.Clients.Scores.HttpIO;
 using OsuApi.V2.Models;
 using OsuApi.V2.Users.Models;
+using System.Text.Json;
 
 // get config from json
 var path = "appsettings.json";
@@ -13,8 +14,8 @@ var configuration = JsonSerializer.Deserialize<ApiV2Configuration>(File.ReadAllT
 if (configuration == null) throw new Exception("Bad appsettings.json");
 
 var api = new ApiV2(configuration.ClientId, configuration.ClientSecret);
-var a1 = await api.Users.GetUserScores(15319810, ScoreType.Best, new() { Limit = 10 });
-var a2 = await api.Beatmaps.GetBeatmapAttributes(4864071, new() { Mods = [new Mod() { Acronym = "DT"}] });
+
+var a1 = await api.Scores.GetScores(new ScoresQueryParameters { CursorString = null, Ruleset = Ruleset.Fruits });
 Console.WriteLine("Done");
 
 /*
