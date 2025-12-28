@@ -152,21 +152,9 @@ public class ApiV2 : Api
         HttpClient.DefaultRequestHeaders.Add("x-api-version", $"{(int)ApiResponseVersion}");
     }
 
-    /// <summary>
-    ///     Makes an HTTP request with given QueryParameters
-    /// </summary>
-    /// <typeparam name="T">Response type to be decoded from json</typeparam>
-    /// <param name="url">Url for current http request</param>
-    /// <param name="httpMethod">HTTP Method to use.</param>
-    /// <param name="queryParameters">Query parameter to pass into url. Can be null, if none query parameters specified</param>
-    /// <param name="content">Body content of the request</param>
-    /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
-    /// <param name="setAuthorizationHeader">Should the auth header be set</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>A response of the type T</returns>
-    public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod,
+    private async Task<HttpResponseMessage> makeRequestAsync(string url, HttpMethod httpMethod,
         QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true,
-        bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null) where T : class
+        bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null)
     {
         cancellationToken ??= CancellationToken.None;
 
@@ -199,8 +187,46 @@ public class ApiV2 : Api
                 $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
         }
 
-        Logger.LogTrace("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken.Value));
-        return await httpResponse.Content.ReadFromJsonAsync<T>(cancellationToken.Value);
+#if DEBUG
+        Console.WriteLine("\n\n\n\n" + await httpResponse.Content.ReadAsStringAsync(cancellationToken!.Value));
+#endif
+
+        return httpResponse;
+    }
+
+
+    /// <summary>
+    /// Makes an HTTP request with given QueryParameters
+    /// </summary>
+    /// <typeparam name="T">Response type to be decoded from json</typeparam>
+    /// <param name="url">Url for current http request</param>
+    /// <param name="httpMethod">HTTP Method to use.</param>
+    /// <param name="queryParameters">Query parameter to pass into url. Can be null, if none query parameters specified</param>
+    /// <param name="content">Body content of the request</param>
+    /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
+    /// <param name="setAuthorizationHeader">Should the auth header be set</param>
+    /// <returns>A response of the type T</returns>
+    public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null) where T : class
+    {
+        var hrm = await makeRequestAsync(url, httpMethod, queryParameters, content, updateTokenIfNeeded, setAuthorizationHeader, cancellationToken);
+        return await hrm.Content.ReadFromJsonAsync<T>(cancellationToken ?? CancellationToken.None);
+    }
+
+    /// <summary>
+    /// Makes an HTTP request with given QueryParameters and returns a stream
+    /// </summary>
+    /// <typeparam name="T">Response type to be decoded from json</typeparam>
+    /// <param name="url">Url for current http request</param>
+    /// <param name="httpMethod">HTTP Method to use.</param>
+    /// <param name="queryParameters">Query parameter to pass into url. Can be null, if none query parameters specified</param>
+    /// <param name="content">Body content of the request</param>
+    /// <param name="updateTokenIfNeeded">Should the token be updated before the request if it's outdated</param>
+    /// <param name="setAuthorizationHeader">Should the auth header be set</param>
+    /// <returns>A response of the type T</returns>
+    public async Task<Stream> MakeRequestAsync(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null)
+    {
+        var hrm = await makeRequestAsync(url, httpMethod, queryParameters, content, updateTokenIfNeeded, setAuthorizationHeader, cancellationToken);
+        return await hrm.Content.ReadAsStreamAsync(cancellationToken ?? CancellationToken.None);
     }
 
     #region Dispose
