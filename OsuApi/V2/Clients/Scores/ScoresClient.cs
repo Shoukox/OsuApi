@@ -35,10 +35,10 @@ public sealed class ScoresClient : Client
         return response;
     }
 
-    public async Task<Stream> DownloadScoreReplay(string scoreId, CancellationToken? cancellationToken = null)
+    public async Task<Stream> DownloadScoreReplay(long scoreId, CancellationToken? cancellationToken = null)
     {
-        var apiv2 = Api as ApiV2;
-        var response = await apiv2.MakeRequestAsync(
+        var apiV2 = Api as ApiV2;
+        var response = await apiV2.MakeRequestAsync(
             url: ApiV2.ApiMainFunctionsBaseAddress + $"/scores/{scoreId}/download",
             HttpMethod.Get,
             null,
