@@ -1,5 +1,6 @@
 ﻿using OsuApi.V2.Clients.Scores.HttpIO;
 using OsuApi.V2.Extensions.Types;
+using OsuApi.V2.Models;
 
 namespace OsuApi.V2.Clients.Scores;
 
@@ -16,6 +17,18 @@ public sealed class ScoresClient : Client
             ApiV2.ApiMainFunctionsBaseAddress + "/scores",
             HttpMethod.Get,
             new QueryParameters(parameters.GetType().GetProperties(), parameters),
+            cancellationToken: cancellationToken
+        );
+
+        return response;
+    }
+
+    public async Task<Score?> GetScore(long scoreId, CancellationToken? cancellationToken = null)
+    {
+        var response = await Api.MakeRequestAsync<Score>(
+            ApiV2.ApiMainFunctionsBaseAddress + $"/scores/{scoreId}",
+            HttpMethod.Get,
+            null,
             cancellationToken: cancellationToken
         );
 

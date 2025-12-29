@@ -13,7 +13,7 @@
         <PackageTags>osu; api</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Version>0.0.509</Version>
+        <Version>0.0.510</Version>
         <PackageId>OsuApi.Core</PackageId>
         <Title>osu!api wrapper in C#</Title>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
