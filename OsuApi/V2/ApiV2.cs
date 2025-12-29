@@ -181,8 +181,6 @@ public class ApiV2 : Api
 
         if (!httpResponse.IsSuccessStatusCode)
         {
-            if (httpResponse.StatusCode == HttpStatusCode.NotFound) return null;
-
             throw new HttpRequestException(
                 $"Request failed with status code {(int)httpResponse.StatusCode} ({httpResponse.StatusCode}).");
         }
@@ -209,7 +207,7 @@ public class ApiV2 : Api
     public override async Task<T?> MakeRequestAsync<T>(string url, HttpMethod httpMethod, QueryParameters? queryParameters = null, HttpContent? content = null, bool updateTokenIfNeeded = true, bool setAuthorizationHeader = true, CancellationToken? cancellationToken = null) where T : class
     {
         var hrm = await makeRequestAsync(url, httpMethod, queryParameters, content, updateTokenIfNeeded, setAuthorizationHeader, cancellationToken);
-        return await hrm.Content.ReadFromJsonAsync<T>(cancellationToken ?? CancellationToken.None);
+        return await hrm.Content.ReadFromJsonAsync<T?>(cancellationToken ?? CancellationToken.None);
     }
 
     /// <summary>

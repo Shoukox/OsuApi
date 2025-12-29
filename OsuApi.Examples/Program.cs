@@ -16,12 +16,6 @@ if (configuration == null) throw new Exception("Bad appsettings.json");
 var api = new ApiV2(configuration.ClientId, configuration.ClientSecret);
 //var a1 = await api.Users.GetUser("@Shoukko", new());
 //var a2 = await api.Beatmaps.GetUserBeatmapScores(970048, 15319810, new());
-//var a3 = await api.Users.GetUserScores(15319810, ScoreType.Recent, new() { IncludeFails = 1, Limit = 1, Mode = Ruleset.Osu });
-var a4 = await api.Scores.DownloadScoreReplay("5407790548");
-
-using var fileStream = File.Create("replay.osr");
-a4.Seek(0, SeekOrigin.Begin);
-a4.CopyTo(fileStream);
-fileStream.Close();
-
+var a3 = await api.Users.GetUserScores(38840686, ScoreType.Recent, new() { IncludeFails = 1, Limit = 1, Mode = Ruleset.Osu });
+//var a4 = await api.Scores.DownloadScoreReplay("5407790548");
 Console.WriteLine();

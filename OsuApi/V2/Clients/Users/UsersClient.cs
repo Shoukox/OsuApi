@@ -59,6 +59,7 @@ public sealed class UsersClient : Client
     ///     <see cref="ScoreType" />
     /// </param>
     /// <param name="parameters">Query parameters</param>
+    /// <param name="cancellationToken">Cancellation token</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     public async Task<GetUserScoresResponse?> GetUserScores(long userId, string scoreType,
